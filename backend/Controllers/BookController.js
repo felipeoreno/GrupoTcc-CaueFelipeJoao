@@ -1,22 +1,32 @@
 const Book = require('../Model/Book')
 const User = require('../Model/User')
+const UserBooks = require('../Model/UserBooks')
+//helpers
 const getToken = require('../helpers/get-token')
 const getUserByToken = require('../helpers/get-user-by-token')
+//libs
 const jwt = require('jsonwebtoken')
-const ImageBook = require('../Model/ImageBook')
+// const ImageBook = require('../Model/ImageBook')
 
 module.exports = class BookController {
   /*==================CRIAR LIVRO==================*/
   static async create(req, res) {
-    const { id, title, subtitle, authors, categories, description, published_year, num_pages } = req.body
+    console.log('req:', req.body)
+    console.log('file: ', req.file)
+
+
+    const { isbn, title, subtitle, authors, categories, description, published_year, num_pages } = req.body
+    console.log('id: ', isbn)
+    console.log('title: ', title)
 
     //recebendo imagem do livro
     let thumbnail = ''
     if (req.file) {
       thumbnail = req.file.filename
     }
+    console.log('imagem: ', thumbnail)
 
-    if (!id) {
+    if (!isbn) {
       res.status(422).json({ message: 'O código ISBN do livro é obrigatório' })
       return
     }
@@ -31,10 +41,10 @@ module.exports = class BookController {
       res.status(422).json({ message: 'As categorias do livro são obrigatórias' })
       return
     }
-    if (!thumbnail) {
-      res.status(422).json({ message: 'A capa do livro é obrigatória' })
-      return
-    }
+    // if (!thumbnail) {
+    //   res.status(422).json({ message: 'A capa do livro é obrigatória' })
+    //   return
+    // } RESOLVER DEPOIS
     if (!description) {
       description = 'Não descrição disponível para este livro'
     }
@@ -55,7 +65,7 @@ module.exports = class BookController {
 
     //criando o livro
     const book = new Book({
-      id: id,
+      id: isbn,
       title: title,
       subtitle: subtitle,
       authors: authors,
@@ -87,16 +97,17 @@ module.exports = class BookController {
       res.status(500).json({ message: error });
     }
   }
+//funcionando -- precisa corrigir a capa
 
   /*==================VER TODOS LIVROS==================*/
   static async getAll(req, res) {
     const books = await Book.findAll({
-      order: [['createdAt', 'DESC']],
-      include: ImageBook
+      order: [['title', 'ASC']]
     });
 
     res.status(200).json({ books: books });
   }
+//funcionando
 
   /*==================VER TODOS LIVROS DO USUÁRIO==================*/
   static async getAllUserBooks(req, res) {
@@ -108,16 +119,14 @@ module.exports = class BookController {
     currentUser.password = undefined
     const currentUserId = currentUser.id
 
-    const books = await Book.findAll({
-      where: { userId: currentUserId },
-      order: [['createdAt', 'DESC']],
-      include: ImageBook
+    const userBooks = await UserBooks.findAll({
+      where: { UserId: currentUserId },
+      order: [['createdAt', 'DESC']]
     })
 
-    res.status(200).json({ books })
-
+    res.status(200).json({ userBooks })
   }
-
+//funcionando (mas não mostra o nome dos livros ainda)
   /*==================VER LIVROS POR ISBN==================*/
   static async getBookById(req, res) {
     const id = req.params.id
@@ -247,14 +256,14 @@ module.exports = class BookController {
     res.status(200).json({ message: "att com successo!" })
   }
 
-  /*==================NÃO SEI AINDA VOU TER Q MUDAR (PODE SER ADICIONAR LIVRO À BIBLIOTECA DO USUÁRIO)==================*/
-  static async schedule(req, res) {
-    const id = req.params.id;
+  /*==================ADICIONAR LIVRO À BIBLIOTECA DO USUÁRIO==================*/
+  static async addBook(req, res) {
+    const bookId = req.params.id;
 
-    const book = await Book.findByPk(id);
+    const book = await Book.findByPk(bookId);
 
     if (!book) {
-      res.status(404).json({ message: "Book não existe!" });
+      res.status(404).json({ message: "Livro não existe!" });
       return;
     }
 
@@ -263,29 +272,35 @@ module.exports = class BookController {
     const token = getToken(req)
     const decoded = jwt.verify(token, 'nossosecret')
     currentUser = await User.findByPk(decoded.id)
+    
+    //pega os livros na biblioteca do usuário
+    const currentUserBooks = await UserBooks.findAll({
+      attributes: ['BookId'],
+      where: {
+        UserId: currentUser.id
+      }
+    })
 
-    if (book.userId === currentUser.id) {
-      res.status(422).json({ message: "O book já é seu" });
+    //verifica se o livro selecionado pelo usuário já está na sua biblioteca
+    if (currentUserBooks.map(userBook => userBook.BookId).includes(bookId)){
+      res.status(422).json({ message: "Você já adicionou o livro a sua biblioteca" });
       return;
     }
 
-    //checar se o usuario ja agendou a visita
-
-    if (book.adopter) {
-      if (book.adopter === currentUser.id) {
-        res.status(422).json({ message: "Voce ja agendou a visita" });
-        return;
-      }
+    try {
+      const newUserBook = await UserBooks.create({
+        UserId: currentUser.id,
+        BookId: bookId
+      });
+    
+      console.log('Livro adicionado à biblioteca, nova linha:', newUserBook);
+      res.status(200).json({ message: `Livro adicionado à biblioteca de ${currentUser.name}` })
+    } catch (error) {
+      console.error('Livro adicionado à biblioteca:', error);
+      res.status(422).json({ message: `Erro ao adicionar livro à biblioteca: ${error}` });
     }
-
-    console.log(book.adopter, ' = ', currentUser.id)
-    //adicioar user como adontante do book
-    book.adopter = currentUser.id
-
-    await book.save()
-
-    res.status(200).json({ message: `Visita agendada por ${currentUser.name}` })
   }
+//funcionando
 
   /*==================MESMA COISA==================*/
   static async concludeAdoption(req, res) {

@@ -8,19 +8,19 @@ const imageUpload = require('../helpers/image-upload')
 
 //---------------- rotas privadas---------------- 
 /*cadastrar um pet*/
-router.post('/create', verifyToken/*, imageUpload.array('images')*/, BookController.create)
+router.post('/create', verifyToken, BookController.create)
 // /* mostrar pets do usuario logado */
 // router.get('/mybooks', verifyToken, BookController.getAllUserBooks)
 // /* deletar um pet pelo id */
 // router.delete('/:id', verifyToken, BookController.removeBookById)
 // /* Editar Book */
 // router.patch('/:id', verifyToken, imageUpload.array('images'), BookController.updateBook)
-// /** Agendar pet */
-// router.patch('/schedule/:id', verifyToken, BookController.schedule)
+/** Adicionar livro à biblioteca do usuário */
+router.post('/addbook/:id', verifyToken, BookController.addBook);
 // /** concluir  adoção */
 // router.patch('/conclude/:id', verifyToken, BookController.concludeAdoption)
-// /* pet adotados pelo user*/
-// router.get('/myadoptions', verifyToken, BookController.getAllUserAdoptions)
+/* Livros na biblioteca do usuário */
+router.get('/mybooks', verifyToken, BookController.getAllUserBooks)
 
 //---------------- rotas publicas ----------------
 /*listar todos os pets*/

@@ -6,10 +6,10 @@ import Profile from "./pages/users/Profile";
 import NavBar from "./components/NavBar";
 import { UserProvider } from './context/UserContext'
 import Container from './components/Container'
-import AddPet from './pages/pets/AddPets'
-import PetDetails from './pages/pets/PetDetails'
-import MyAdoptions from "./pages/pets/MyAdoptions";
-import MyPets from "./pages/pets/MyPets";
+import AddBook from './pages/books/AddBooks'
+import BookDetails from './pages/books/BookDetails'
+import MyAdoptions from "./pages/books/MyAdoptions";
+import MyBooks from "./pages/books/MyBooks";
 
 
 function App() {
@@ -24,10 +24,10 @@ function App() {
               <Route exact path="/register" element={<Register />} />
               <Route exact path="/login" element={<Login />} />
               <Route exact path="/user/profile" element={<Profile />} />
-              <Route exact path="/pet/create" element={<AddPet />} />
-              <Route exact path="/pet/:id" element={<PetDetails />} />
-              <Route exact path="/pet/myadoptions" element={<MyAdoptions />} />
-              <Route exact path="/pet/mypets" element={<MyPets />} />
+              <Route exact path="/books/create" element={<AddBook />} />
+              <Route exact path="/books/:id" element={<BookDetails />} />
+              <Route exact path="/books/myadoptions" element={<MyAdoptions />} />
+              <Route exact path="/books/mybooks" element={<MyBooks />} />
             </Routes>
           </Container>
         </UserProvider>

@@ -3,17 +3,17 @@ import InputGroup from '../../../components/InputGroup'
 import api from '../../../utils/api'
 
 function AddPet() {
-    const [pet, setPet] = useState({})
+    const [book, setBook] = useState({})
     const [preview, setPreview] = useState()
     const [token] = useState(localStorage.getItem('token') || '')
 
     function handleChange(e) {
-        setPet({ ...pet, [e.target.name]: e.target.value })
+        setBook({ ...book, [e.target.name]: e.target.value })
     }
-    const [images, setImage] = useState(null)
+    const [thumbnail, setThumbnail] = useState(null)
     function onFileChange(e) {
         setPreview(URL.createObjectURL(e.target.files[0]))
-        setImage(e.target.files[0])
+        setThumbnail(e.target.files[0])
     }
 
     async function handleSubmit(e) {
@@ -21,14 +21,14 @@ function AddPet() {
 
         const formData = new FormData()
 
-        if (images) {
-            formData.append('images', images)
+        if (thumbnail) {
+            formData.append('thumbnail', thumbnail)
         }
 
         //montando objeto com o formulario
-        await Object.keys(pet).forEach((key) => formData.append(key, pet[key]))
+        await Object.keys(book).forEach((key) => formData.append(key, book[key]))
 
-        const data = await api.post(`pets/create`, formData, {
+        const data = await api.post(`books/create`, formData, {
             headers: {
                 Authorization: `Bearer ${JSON.parse(token)}`,
                 'Content-Type': 'multipart/form-data'
@@ -49,34 +49,34 @@ function AddPet() {
                 <InputGroup
                     type='file'
                     label='Colocar foto do dog'
-                    name='images'
+                    name='thumbnail'
                     handleChange={onFileChange}
                 />
                 <InputGroup
-                    type='text'
+                    type='number'
                     label='Digite o nome do dog'
-                    name='name'
+                    name='isbn'
                     placeholder='Digite o nome do cachorro'
                     handleChange={handleChange}
                 />
                 <InputGroup
-                    type='number'
+                    type='text'
                     label='Digite a idade do dog'
-                    name='age'
+                    name='title'
                     placeholder='Digite a idade do cachorro'
                     handleChange={handleChange}
                 />
                 <InputGroup
-                    type='number'
+                    type='text'
                     label='Digite o peso'
-                    name='weight'
+                    name='authors'
                     placeholder='Digite o peso do cachorro'
                     handleChange={handleChange}
                 />
                 <InputGroup
                     type='text'
                     label='Digite a cor'
-                    name='color'
+                    name='categories'
                     placeholder='Digite a cor'
                     handleChange={handleChange}
                 />
