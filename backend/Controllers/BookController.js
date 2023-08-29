@@ -259,7 +259,8 @@ module.exports = class BookController {
   /*==================ADICIONAR LIVRO À BIBLIOTECA DO USUÁRIO==================*/
   static async addBook(req, res) {
     const bookId = req.params.id;
-
+    const { favorite, read, toRead, reading, reReading, rating } = req.body;
+    
     const book = await Book.findByPk(bookId);
 
     if (!book) {
@@ -267,7 +268,7 @@ module.exports = class BookController {
       return;
     }
 
-    //checar se o usuario logado registrou o book
+    //pega o usuário no banco
     let currentUser
     const token = getToken(req)
     const decoded = jwt.verify(token, 'nossosecret')
@@ -275,35 +276,41 @@ module.exports = class BookController {
     
     //pega os livros na biblioteca do usuário
     const currentUserBooks = await UserBooks.findAll({
-      attributes: ['BookId'],
+      // attributes: ['BookId'],
       where: {
         UserId: currentUser.id
       }
     })
 
     //verifica se o livro selecionado pelo usuário já está na sua biblioteca
-    if (currentUserBooks.map(userBook => userBook.BookId).includes(bookId)){
-      res.status(422).json({ message: "Você já adicionou o livro a sua biblioteca" });
+    if (currentUserBooks.some(userBook => userBook.dataValues.BookId == bookId)){
+      res.status(422).json({ message: "Você já adicionou o livro à sua biblioteca" });
       return;
     }
 
     try {
       const newUserBook = await UserBooks.create({
         UserId: currentUser.id,
-        BookId: bookId
+        BookId: bookId,
+        favorite: favorite,
+        read: read,
+        toRead: toRead,
+        reading: reading,
+        reReading: reReading,
+        rating: rating
       });
     
       console.log('Livro adicionado à biblioteca, nova linha:', newUserBook);
       res.status(200).json({ message: `Livro adicionado à biblioteca de ${currentUser.name}` })
     } catch (error) {
-      console.error('Livro adicionado à biblioteca:', error);
+      console.error('Erro ao adicionar livro:', error);
       res.status(422).json({ message: `Erro ao adicionar livro à biblioteca: ${error}` });
     }
   }
 //funcionando
 
   /*==================MESMA COISA==================*/
-  static async concludeAdoption(req, res) {
+  /*static async concludeAdoption(req, res) {
     const id = req.params.id;
 
     const book = await Book.findByPk(id);
@@ -327,10 +334,10 @@ module.exports = class BookController {
     await book.save(); // Salvando a instância do book atualizada.
 
     res.status(200).json({ message: `Adoção concluída` })
-  }
+  }*/
 
   /*==================VER A BIBLIOTECA DO USUÁRIO==================*/
-  static async getAllUserAdoptions(req, res) {
+  static async getAllUserBooks(req, res) {
 
     //get usuario pelo token
     let currentUser
@@ -338,10 +345,9 @@ module.exports = class BookController {
     const decoded = jwt.verify(token, 'nossosecret')
     currentUser = await User.findByPk(decoded.id)
 
-    const books = await Book.findAll({
-      where: { adopter: currentUser.id },
-      order: [['createdAt', 'DESC']],
-      include: [{ model: User, attributes: ['name', 'phone'] }, ImageBook]
+    const books = await UserBooks.findAll({
+      where: { UserId: currentUser.id },
+      order: [['createdAt', 'DESC']]
     });
     ;
 
