@@ -46,7 +46,7 @@ module.exports = class BookController {
     //   return
     // } RESOLVER DEPOIS
     if (!description) {
-      description = 'Não descrição disponível para este livro'
+      description = 'Não há descrição disponível para este livro'
     }
     if (!published_year) {
       res.status(422).json({ message: 'O ano de publicação é obrigatório' })
@@ -97,7 +97,7 @@ module.exports = class BookController {
       res.status(500).json({ message: error });
     }
   }
-//funcionando -- precisa corrigir a capa
+  //funcionando -- precisa corrigir a capa
 
   /*==================VER TODOS LIVROS==================*/
   static async getAll(req, res) {
@@ -107,7 +107,7 @@ module.exports = class BookController {
 
     res.status(200).json({ books: books });
   }
-//funcionando
+  //funcionando
 
   /*==================VER TODOS LIVROS DO USUÁRIO==================*/
   static async getAllUserBooks(req, res) {
@@ -126,7 +126,7 @@ module.exports = class BookController {
 
     res.status(200).json({ userBooks })
   }
-//funcionando (mas não mostra o nome dos livros ainda)
+  //funcionando (mas não mostra o nome dos livros ainda)
   /*==================VER LIVROS POR ISBN==================*/
   static async getBookById(req, res) {
     const id = req.params.id
@@ -184,74 +184,99 @@ module.exports = class BookController {
 
   /*==================EDITAR LIVRO==================*/
   static async updateBook(req, res) {
-    const id = req.params.id
-    const { name, age, weight, color } = req.body
+    const bookId = req.params.id
+    const { isbn, title, subtitle, authors, categories, thumbnail, description, published_year, num_pages } = req.body
 
-    const updateData = {}
-    const book = await Book.findByPk(id);
+    const updatedData = {}
+    const book = await Book.findByPk(bookId);
 
     if (!book) {
-      res.status(404).json({ message: "Book não existe!" });
+      res.status(404).json({ message: "Livro não existe!" });
       return;
     }
 
-    //pegando o dono do book
-    let currentUser
-    const token = getToken(req)
-    const decoded = jwt.verify(token, 'nossosecret')
-    currentUser = await User.findByPk(decoded.id)
+    //pegando o usuário
+    let currentUser;
+    const token = getToken(req);
+    const decoded = jwt.verify(token, 'nossosecret');
+    currentUser = await User.findByPk(decoded.id);
 
-    if (book.UserId !== currentUser.id) {
-      res.status(422).json({ message: "ID inválido!" });
-      return;
-    }
+    // if (currentUser.nivel !== 1) {
+    //   res.status(422).json({ message: "Você não tem permissão para executar esta ação!" });
+    //   return;
+    // }
 
-    if (!name) {
-      res.status(422).json({ message: "O nome é obrigatório!" });
-      return;
-    } else {
-      updateData.name = name
-    }
-    if (!age) {
-      res.status(422).json({ message: "A idade é obrigatória!" });
+    if (!isbn) {
+      res.status(422).json({ message: "O código ISBN do livro é obrigatório!" });
       return;
     } else {
-      updateData.age = age
+      updatedData.id = isbn;
     }
-    if (!weight) {
-      res.status(422).json({ message: "O peso é obrigatório!" });
+
+    if (!title) {
+      res.status(422).json({ message: "O título é obrigatório!" });
       return;
     } else {
-      updateData.weight = weight
+      updatedData.title = title;
     }
-    if (!color) {
-      res.status(422).json({ message: "A cor é obrigatória!" });
+    
+    updatedData.subtitle = subtitle;
+
+    if (!authors) {
+      authors = 'Anônimo';
+      updatedData.authors = authors;
+    } else {
+      updatedData.authors = authors;
+    }
+
+    if (!categories) {
+      res.status(422).json({ message: "As categorias são obrigatórias!" });
       return;
     } else {
-      updateData.color = color
+      updatedData.categories = categories;
     }
 
+    updatedData.thumbnail = thumbnail;
 
+    if (!description) {
+      description = 'Não há descrição disponível para este livro';
+    } else {
+      updatedData.description = description;
+    }
 
-    const images = req.files
-    if (!images || images.length === 0) {
-      res.status(422).json({ message: "As imagens são obrigatórias!" });
+    if (!published_year) {
+      res.status(422).json({ message: "O ano de publicação é obrigatório!" });
       return;
     } else {
-      // Atualizar as imagens do book
-      const imageFilenames = images.map((image) => image.filename);
-      // Remover imagens antigas
-      await ImageBook.destroy({ where: { BookId: book.id } });
-      // Adicionar novas imagens
-      for (let i = 0; i < imageFilenames.length; i++) {
-        const filename = imageFilenames[i];
-        const newImageBook = new ImageBook({ image: filename, BookId: book.id });
-        await newImageBook.save();
-      }
-
+      updatedData.published_year = published_year;
     }
 
-    await Book.update(updateData, { where: { id: id } });
+    if (!num_pages) {
+      res.status(422).json({ message: "O número de páginas é obrigatório!" });
+      return;
+    } else {
+      updatedData.num_pages = num_pages;
+    }
+
+    // const images = req.files
+    // if (!images || images.length === 0) {
+    //   res.status(422).json({ message: "As imagens são obrigatórias!" });
+    //   return;
+    // } else {
+    //   // Atualizar as imagens do book
+    //   const imageFilenames = images.map((image) => image.filename);
+    //   // Remover imagens antigas
+    //   await ImageBook.destroy({ where: { BookId: book.id } });
+    //   // Adicionar novas imagens
+    //   for (let i = 0; i < imageFilenames.length; i++) {
+    //     const filename = imageFilenames[i];
+    //     const newImageBook = new ImageBook({ image: filename, BookId: book.id });
+    //     await newImageBook.save();
+    //   }
+
+    // }
+
+    await Book.update(updatedData, { where: { id: bookId } });
 
     res.status(200).json({ message: "att com successo!" })
   }
@@ -260,7 +285,7 @@ module.exports = class BookController {
   static async addBook(req, res) {
     const bookId = req.params.id;
     const { favorite, read, toRead, reading, reReading, rating } = req.body;
-    
+
     const book = await Book.findByPk(bookId);
 
     if (!book) {
@@ -273,7 +298,7 @@ module.exports = class BookController {
     const token = getToken(req)
     const decoded = jwt.verify(token, 'nossosecret')
     currentUser = await User.findByPk(decoded.id)
-    
+
     //pega os livros na biblioteca do usuário
     const currentUserBooks = await UserBooks.findAll({
       // attributes: ['BookId'],
@@ -283,7 +308,7 @@ module.exports = class BookController {
     })
 
     //verifica se o livro selecionado pelo usuário já está na sua biblioteca
-    if (currentUserBooks.some(userBook => userBook.dataValues.BookId == bookId)){
+    if (currentUserBooks.some(userBook => userBook.dataValues.BookId == bookId)) {
       res.status(422).json({ message: "Você já adicionou o livro à sua biblioteca" });
       return;
     }
@@ -299,15 +324,15 @@ module.exports = class BookController {
         reReading: reReading,
         rating: rating
       });
-    
+
       console.log('Livro adicionado à biblioteca, nova linha:', newUserBook);
-      res.status(200).json({ message: `Livro adicionado à biblioteca de ${currentUser.name}` })
+      res.status(200).json({ message: `Livro adicionado à biblioteca de ${currentUser.title}` })
     } catch (error) {
       console.error('Erro ao adicionar livro:', error);
       res.status(422).json({ message: `Erro ao adicionar livro à biblioteca: ${error}` });
     }
   }
-//funcionando
+  //funcionando
 
   /*==================MESMA COISA==================*/
   /*static async concludeAdoption(req, res) {
@@ -349,11 +374,8 @@ module.exports = class BookController {
       where: { UserId: currentUser.id },
       order: [['createdAt', 'DESC']]
     });
-    ;
 
-    res.status(200).json({
-      books,
-    })
-
+    res.status(200).json({ books })
   }
+  //funcionando
 }

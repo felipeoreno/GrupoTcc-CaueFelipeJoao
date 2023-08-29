@@ -23,6 +23,10 @@ const User = db.define('User', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    // nivel: {
+    //   type: DataTypes.TINYINT(1),
+    //   allowNull: false
+    // }
 })
 
 module.exports = User
