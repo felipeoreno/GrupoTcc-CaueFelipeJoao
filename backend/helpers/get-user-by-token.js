@@ -6,16 +6,16 @@ const User = require('../Model/User')
 //pegar usuario com o token
 
 async function getUserByToken(token, res) {
-    if (!token) {
-        return res.status(401).json({ message: 'Acesso negado' })
-    }
+  if (!token) {
+    return res.status(401).json({ message: 'Acesso negado' })
+  }
 
-    const decoded = jwt.verify(token, 'nossosecret')
+  const decoded = jwt.verify(token, 'nossosecret')
 
-    const userId = decoded.id
+  const userId = decoded.id
 
-    const user = await User.findOne({id: userId})
+  const user = await User.findOne({ id: userId })
 
-    return user
+  return user
 }
 module.exports = getUserByToken

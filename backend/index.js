@@ -18,8 +18,8 @@ app.use('/users', UserRoutes)
 app.use('/books', BookRoutes)
 
 conn
-    .sync()
-    .then(() => {
-        app.listen(5000)
-    })
-    .catch((error) => console.log(error))
+  .sync()
+  .then(() => {
+    app.listen(5000)
+  })
+  .catch((error) => console.log(error))

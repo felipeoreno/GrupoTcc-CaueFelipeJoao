@@ -3,22 +3,22 @@ const { DataTypes } = require('sequelize')
 const db = require('../db/conn')
 
 const UserBooks = db.define('UserBooks', {
-  favorite:{
+  favorite: {
     type: DataTypes.BOOLEAN
   },
-  read:{
+  read: {
     type: DataTypes.BOOLEAN
   },
-  toRead:{
+  toRead: {
     type: DataTypes.BOOLEAN
   },
-  reading:{
+  reading: {
     type: DataTypes.BOOLEAN
   },
-  reReading:{
+  reReading: {
     type: DataTypes.BOOLEAN
   },
-  rating:{
+  rating: {
     type: DataTypes.TINYINT(5)
   }
 })

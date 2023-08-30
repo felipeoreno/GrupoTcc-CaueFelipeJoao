@@ -11,13 +11,13 @@ const jwt = require('jsonwebtoken')
 module.exports = class BookController {
   /*==================CRIAR LIVRO==================*/
   static async create(req, res) {
-    console.log('req:', req.body)
-    console.log('file: ', req.file)
+    console.log('req:', req.body);
+    console.log('file: ', req.file);
 
-
-    const { isbn, title, subtitle, authors, categories, description, published_year, num_pages } = req.body
-    console.log('id: ', isbn)
-    console.log('title: ', title)
+    const { isbn, title, subtitle, categories, published_year, num_pages } = req.body;
+    let { authors, description } = req.body;
+    console.log('id: ', isbn);
+    console.log('title: ', title);
 
     //recebendo imagem do livro
     let thumbnail = ''
@@ -149,43 +149,45 @@ module.exports = class BookController {
 
   /*==================REMOVER LIVROS POR ISBN==================*/
   static async removeBookById(req, res) {
-    const id = req.params.id
+    const id = req.params.id;
 
     if (isNaN(id)) {
-      res.status(422).json({ message: 'ID Inválido' })
-      return
+      res.status(422).json({ message: 'ID Inválido' });
+      return;
     }
+
     //get book by id
-    const book = await Book.findByPk(id)
+    const book = await Book.findByPk(id);
 
     //validando se o ID é valido
     if (!book) {
-      res.status(422).json({ message: 'Book não existe' })
-      return
+      res.status(422).json({ message: 'O livro não existe' });
+      return;
     }
 
     //checar se o usuario logado registrou o book
-    let currentUser
-    const token = getToken(req)
-    const decoded = jwt.verify(token, 'nossosecret')
-    currentUser = await User.findByPk(decoded.id)
-    currentUser.password = undefined
-    const currentUserId = currentUser.id
+    let currentUser;
+    const token = getToken(req);
+    const decoded = jwt.verify(token, 'nossosecret');
+    currentUser = await User.findByPk(decoded.id);
+    currentUser.password = undefined;
+    const currentUserLevel = currentUser.level;
 
-    // if (Number(book.userId) !== Number(currentUserId)) {
-    //     res.status(422).json({ message: 'ID inválido' })
-    //     return
-    // }
+    if (currentUserLevel !== 1) {
+      res.status(422).json({ message: 'Você não tem permissão para executar esta ação' });
+      return;
+    }
 
-    await Book.destroy({ where: { id: id } })
+    await Book.destroy({ where: { id: id } });
 
-    res.status(200).json({ message: 'Book removido com sucesso' })
+    res.status(200).json({ message: 'Livro removido com sucesso' });
   }
 
   /*==================EDITAR LIVRO==================*/
   static async updateBook(req, res) {
-    const bookId = req.params.id
-    const { isbn, title, subtitle, authors, categories, thumbnail, description, published_year, num_pages } = req.body
+    const bookId = req.params.id;
+    const { isbn, title, subtitle, categories, published_year, num_pages } = req.body;
+    let { authors, description } = req.body;
 
     const updatedData = {}
     const book = await Book.findByPk(bookId);
@@ -201,10 +203,10 @@ module.exports = class BookController {
     const decoded = jwt.verify(token, 'nossosecret');
     currentUser = await User.findByPk(decoded.id);
 
-    // if (currentUser.nivel !== 1) {
-    //   res.status(422).json({ message: "Você não tem permissão para executar esta ação!" });
-    //   return;
-    // }
+    if (currentUser.level !== 1) {
+      res.status(422).json({ message: "Você não tem permissão para executar esta ação!" });
+      return;
+    }
 
     if (!isbn) {
       res.status(422).json({ message: "O código ISBN do livro é obrigatório!" });
@@ -219,7 +221,7 @@ module.exports = class BookController {
     } else {
       updatedData.title = title;
     }
-    
+
     updatedData.subtitle = subtitle;
 
     if (!authors) {
