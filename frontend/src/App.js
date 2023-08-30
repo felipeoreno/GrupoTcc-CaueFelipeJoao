@@ -1,15 +1,15 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import Register from "./pages/users/Register";
-import Login from "./pages/users/Login";
-import Profile from "./pages/users/Profile";
+import Register from "./pages/User/Register";
+import Login from "./pages/User/Login";
+import Profile from "./pages/User/Profile";
 import NavBar from "./components/NavBar";
 import { UserProvider } from './context/UserContext'
 import Container from './components/Container'
-import AddBook from './pages/books/AddBooks'
-import BookDetails from './pages/books/BookDetails'
-import MyAdoptions from "./pages/books/MyAdoptions";
-import MyBooks from "./pages/books/MyBooks";
+import AddBook from './pages/Books/AddBook'
+import BookDetails from './pages/Books/BookDetails'
+import MyAdoptions from "./pages/Books/MyAdoptions";
+import MyBooks from "./pages/Books/MyBooks";
 
 
 function App() {

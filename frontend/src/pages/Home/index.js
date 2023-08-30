@@ -27,7 +27,7 @@ function Home() {
               <img
                 src={`http://localhost:5000/image/pets/${pet.ImagePets && pet.ImagePets[0] && pet.ImagePets[0].image}`}
                 className='card-img-top'
-                style={{height: '300px'}}
+                style={{ height: '300px' }}
               />
               <figcaption className='card-body'>
                 <h3 className='card-title'>{pet.name}</h3>

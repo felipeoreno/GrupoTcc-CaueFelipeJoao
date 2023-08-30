@@ -82,30 +82,33 @@ function AddBook() {
                 />
                 <InputGroup
                     type='text'
-                    label='Digite o nome do(s) autor(es)'
-                    name='authors'
-                    placeholder='Digite aqui o nome'
+                    label='Digite as categorias do Livro'
+                    name='categories'
+                    placeholder='Digite aqui as categorias'
                     handleChange={handleChange}
                 />
                 <InputGroup
                     type='text'
-                    label='Digite o nome do(s) autor(es)'
-                    name='authors'
-                    placeholder='Digite aqui o nome'
+                    label='Digite a descrição do Livro'
+                    name='description'
+                    placeholder='Digite aqui a descrição'
                     handleChange={handleChange}
                 />
                 <InputGroup
-                    type='text'
-                    label='Digite o nome do(s) autor(es)'
-                    name='authors'
-                    placeholder='Digite aqui o nome'
+                    type='number'
+                    min='-10000'
+                    max='2023'
+                    label='Digite o ano de publicação do Livro'
+                    name='published_year'
+                    placeholder='Digite aqui o ano de publicação'
                     handleChange={handleChange}
                 />
                 <InputGroup
-                    type='text'
-                    label='Digite o nome do(s) autor(es)'
-                    name='authors'
-                    placeholder='Digite aqui o nome'
+                    type='number'
+                    min='1'
+                    label='Digite o número de páginas do Livro'
+                    name='num_pages'
+                    placeholder='Digite aqui o número de páginas'
                     handleChange={handleChange}
                 />
                 <button type='submit'>Cadastrar</button>
