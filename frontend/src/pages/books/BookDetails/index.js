@@ -2,22 +2,22 @@ import React, { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import api from '../../../utils/api'
 
-function PetDetails() {
+function BookDetails() {
 
-    const [pet, setPet] = useState({})
+    const [book, setBook] = useState({})
     const { id } = useParams()
 
     const [token] = useState(localStorage.getItem('token') || '')
 
     useEffect(() => {
-        api.get(`/pets/${id}`).then((response) => {
-            setPet(response.data.pet)
+        api.get(`/books/${id}`).then((response) => {
+            setBook(response.data.book)
         })
     }, [id])
 
     async function schedule() {
         const data = await api
-            .patch(`pets/schedule/${pet.id}`, {
+            .patch(`books/schedule/${book.id}`, {
                 headers: {
                     Authorization: `Bearer ${JSON.parse(token)}`
                 }
@@ -35,21 +35,21 @@ function PetDetails() {
 
     return (
         <div>
-            {pet.name && (
+            {book.name && (
                 <section>
                     <div>
-                        <h3>Conhecendo o Pet: {pet.name}</h3>
+                        <h3>Conhecendo o Book: {book.name}</h3>
                         <p>Se tiver interesse, marque uma visita para conhece-lo</p>
                     </div>
                     <div>
-                        {pet.ImagePets && pet.ImagePets.length > 0 ? (
-                            pet.ImagePets.map((imagePet, index) => {
-                                const imageUrl = `http://localhost:5000/image/pets/${imagePet.image}`
+                        {book.ImageBooks && book.ImageBooks.length > 0 ? (
+                            book.ImageBooks.map((imageBook, index) => {
+                                const imageUrl = `http://localhost:5000/image/books/${imageBook.image}`
                                 return (
                                     <img
                                         key={index}
                                         src={imageUrl}
-                                        alt={pet.name}
+                                        alt={book.name}
                                     />
                                 )
                             })
@@ -57,8 +57,8 @@ function PetDetails() {
                             <p>Não há imagens disponiveis para esse cachorro</p>
                         )}
                     </div>
-                    <p>Peso: {pet.weight}kg</p>
-                    <p>Idade: {pet.age} anos</p>
+                    <p>Peso: {book.weight}kg</p>
+                    <p>Idade: {book.age} anos</p>
                     {token ? (
                         <button onClick={schedule}>Solicitar uma Visita</button>
                     ) : (
@@ -72,4 +72,4 @@ function PetDetails() {
     )
 }
 
-export default PetDetails
+export default BookDetails

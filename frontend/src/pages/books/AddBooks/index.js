@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import InputGroup from '../../../components/InputGroup'
 import api from '../../../utils/api'
 
-function AddPet() {
+function AddBook() {
     const [book, setBook] = useState({})
     const [preview, setPreview] = useState()
     const [token] = useState(localStorage.getItem('token') || '')
@@ -44,40 +44,68 @@ function AddPet() {
 
     return (
         <div>
-            <h3>Cadastre um Pet para adoção</h3>
+            <h3>Cadastre um Livro</h3>
             <form onSubmit={handleSubmit}>
                 <InputGroup
                     type='file'
-                    label='Colocar foto do dog'
+                    label='Colocar capa do livro'
                     name='thumbnail'
                     handleChange={onFileChange}
                 />
                 <InputGroup
                     type='number'
-                    label='Digite o nome do dog'
+                    label='Digite código ISBN de 13 dígitos do Livro'
                     name='isbn'
-                    placeholder='Digite o nome do cachorro'
+                    placeholder='Digite o código ISBN aqui'
                     handleChange={handleChange}
                 />
                 <InputGroup
                     type='text'
-                    label='Digite a idade do dog'
+                    label='Digite o título do Livro'
                     name='title'
-                    placeholder='Digite a idade do cachorro'
+                    placeholder='Digite o título aqui'
                     handleChange={handleChange}
                 />
                 <InputGroup
                     type='text'
-                    label='Digite o peso'
+                    label='Digite o subtítulo do Livro'
+                    name='subtitle'
+                    placeholder='Digite o subtítulo aqui'
+                    handleChange={handleChange}
+                />
+                <InputGroup
+                    type='text'
+                    label='Digite o nome do(s) autor(es)'
                     name='authors'
-                    placeholder='Digite o peso do cachorro'
+                    placeholder='Digite aqui o nome'
                     handleChange={handleChange}
                 />
                 <InputGroup
                     type='text'
-                    label='Digite a cor'
-                    name='categories'
-                    placeholder='Digite a cor'
+                    label='Digite o nome do(s) autor(es)'
+                    name='authors'
+                    placeholder='Digite aqui o nome'
+                    handleChange={handleChange}
+                />
+                <InputGroup
+                    type='text'
+                    label='Digite o nome do(s) autor(es)'
+                    name='authors'
+                    placeholder='Digite aqui o nome'
+                    handleChange={handleChange}
+                />
+                <InputGroup
+                    type='text'
+                    label='Digite o nome do(s) autor(es)'
+                    name='authors'
+                    placeholder='Digite aqui o nome'
+                    handleChange={handleChange}
+                />
+                <InputGroup
+                    type='text'
+                    label='Digite o nome do(s) autor(es)'
+                    name='authors'
+                    placeholder='Digite aqui o nome'
                     handleChange={handleChange}
                 />
                 <button type='submit'>Cadastrar</button>
@@ -86,4 +114,4 @@ function AddPet() {
     )
 }
 
-export default AddPet
+export default AddBook

@@ -2,28 +2,28 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../../../utils/api'
 
-function MyPets() {
-    const [pets, setPets] = useState([])
+function MyBooks() {
+    const [books, setBooks] = useState([])
     const [token] = useState(localStorage.getItem('token') || '')
 
     useEffect(() => {
-        api.get('/pets/mypets', {
+        api.get('/books/mybooks', {
             headers: {
                 Authorization: `Bearer ${JSON.parse(token)}`
             }
         }).then((response) => {
-            setPets(response.data.pets)
+            setBooks(response.data.books)
         })
     }, [token])
 
-    async function removePet(id) {
-        const data = await api.delete(`/pets/${id}`, {
+    async function removeBook(id) {
+        const data = await api.delete(`/books/${id}`, {
             headers: {
                 Authorization: `Bearer ${JSON.parse(token)}`
             }
         }).then((response) => {
-            const updatedPets = pets.filter((pet) => pet.id !== id)
-            setPets(updatedPets)
+            const updatedBooks = books.filter((book) => book.id !== id)
+            setBooks(updatedBooks)
             return response.data
         }).catch((err) => {
             return err.response.data
@@ -33,7 +33,7 @@ function MyPets() {
     }
 
     async function concludeAdoption(id) {
-        const data = await api.patch(`/pets/conclude/${id}`, {
+        const data = await api.patch(`/books/conclude/${id}`, {
             headers: {
                 Authorization: `Bearer ${JSON.parse(token)}`
             }
@@ -48,51 +48,51 @@ function MyPets() {
     return (
         <section className='container'>
             <div>
-                <h3>Meus pets cadastrados</h3>
-                <Link to='/pet/add'>Cadastrar Pet</Link>
+                <h3>Meus books cadastrados</h3>
+                <Link to='/book/add'>Cadastrar Book</Link>
             </div>
             <div className='d-flex justify-content-around flex-wrap'>
-                {pets.length > 0 &&
-                    pets.map((pet) => (
+                {books.length > 0 &&
+                    books.map((book) => (
                         <figure
-                            key={pet.id}
+                            key={book.id}
                             className='card'
                             style={{ width: '18rem' }}
                         >
                             <img
-                                src={`http://localhost:5000/image/pets/${pet.ImagePets && pet.ImagePets[0] && pet.ImagePets[0].image}`}
-                                alt={pet.name}
+                                src={`http://localhost:5000/image/books/${book.ImageBooks && book.ImageBooks[0] && book.ImageBooks[0].image}`}
+                                alt={book.name}
                                 className='card-img-top'
                                 style={{ height: '300px' }}
                             />
                             <figcaption className='card-body'>
-                                <h5 className='card-title'>{pet.name}</h5>
+                                <h5 className='card-title'>{book.name}</h5>
                                 <div>
-                                    {pet.available ? (
+                                    {book.available ? (
                                         <>
-                                            {pet.adopter && (
+                                            {book.adopter && (
                                                 <button
-                                                    onClick={() => { concludeAdoption(pet.id) }}
+                                                    onClick={() => { concludeAdoption(book.id) }}
                                                     className='btn btn-info'
                                                 >Concluir adoção</button>
                                             )}
                                             <Link className='btn btn-warning' >Editar</Link>
                                             <button
-                                                onClick={() => { removePet(pet.id) }}
+                                                onClick={() => { removeBook(book.id) }}
                                                 className='btn btn-danger'
                                             >Excluir</button>
                                         </>
                                     ) : (
-                                        <p>Pet já adotado</p>
+                                        <p>Book já adotado</p>
                                     )}
                                 </div>
                             </figcaption>
                         </figure>
                     ))}
-                {pets.length === 0 && <p>Ainda não há pets cadastrados</p>}
+                {books.length === 0 && <p>Ainda não há books cadastrados</p>}
             </div>
         </section>
     )
 }
 
-export default MyPets
+export default MyBooks;
