@@ -10,6 +10,7 @@ import AddBook from './pages/Books/AddBook'
 import BookDetails from './pages/Books/BookDetails'
 import MyAdoptions from "./pages/Books/MyAdoptions";
 import MyBooks from "./pages/Books/MyBooks";
+import myRoutes from "./Routes/route";
 
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
         <UserProvider>
           <NavBar />
           <Container>
-            <Routes>
+            {/* <Routes>
               <Route exact path="/" element={<Home />} />
               <Route exact path="/register" element={<Register />} />
               <Route exact path="/login" element={<Login />} />
@@ -28,7 +29,8 @@ function App() {
               <Route exact path="/books/:id" element={<BookDetails />} />
               <Route exact path="/books/myadoptions" element={<MyAdoptions />} />
               <Route exact path="/books/mybooks" element={<MyBooks />} />
-            </Routes>
+            </Routes> */}
+            <myRoutes />
           </Container>
         </UserProvider>
       </Router>

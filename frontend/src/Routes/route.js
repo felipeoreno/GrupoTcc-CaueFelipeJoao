@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import api from '../utils/api';
@@ -7,7 +8,7 @@ import Home from '../pages/Home';
 //componentes
 import Container from '../components/Container';
 import InputGroup from '../components/InputGroup';
-import NavBar from './components/Navbar';
+import NavBar from '../components/NavBar';
 import { Context } from '../context/UserContext';
 
 // Usuario 
@@ -22,13 +23,12 @@ import EditBook from '../pages/Books/EditBook';
 
 
 function myRoutes() {
-  const { authenticated } = useContext(Context)
-  const [user, setUser] = useState({})
+  const { authenticated } = useContext(Context);
+  const [user, setUser] = useState({});
 
   useEffect(() => {
     if (!token) {
-      alert('Por favor faça o login')
-      navigate('/login')
+      navigate('/');
     } else {
       api.get('/users/checkuser', {
         headers: {
@@ -38,19 +38,14 @@ function myRoutes() {
         setUser(response.data)
       })
     }
-  }, [])
-
-
+  }, []);
 
   return (
     <>
-
       <Routes>
         {authenticated ? (
           <>
             <Route exact path="/" element={<Home />} />
-            <Route exact path="/register" element={<Register />} />
-            <Route exact path="/login" element={<Login />} />
             <Route exact path="/user/profile" element={<Profile />} />
 
             <Route exact path="/books/:id" element={<BookDetails />} />
@@ -61,10 +56,14 @@ function myRoutes() {
           <>
             <Route exact path="/" element={<Login />} />
             <Route exact path="/register" element={<Register />} />
+            <Route exact path="/login" element={<Login />} />
           </>
         )}
         {user.level === 1 ? (
-          <Route exact path="/books/create" element={<AddBook />} />
+          <>
+            <Route exact path="/books/create" element={<AddBook />} />
+            <Route exact path="/books/edit" element={<EditBook />} />
+          </>
         ) : ('')}
       </Routes>
     </>
@@ -72,7 +71,3 @@ function myRoutes() {
 }
 
 export default myRoutes;
-
-
-
-
