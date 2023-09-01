@@ -12,16 +12,16 @@ import { Context } from '../../../context/UserContext'
 function Login() {
   //aqui entra a lógica para o login
 
-  const [user, setUser] = useState({})
-  const { login } = useContext(Context)
+  const [user, setUser] = useState({});
+  const { login } = useContext(Context);
 
   function handleChange(e) {
-    setUser({ ...user, [e.target.name]: e.target.value })
+    setUser({ ...user, [e.target.name]: e.target.value });
   }
 
   function handleSubmit(e) {
-    e.preventDefault()
-    login(user)
+    e.preventDefault();
+    login(user);
   }
 
   return (
@@ -39,16 +39,16 @@ function Login() {
           label='password'
           type='password'
           name='password'
-          placeholder='Digite seu password'
+          placeholder='Digite sua senha'
           handleChange={handleChange}
         />
         <button type='submit'>Login</button>
       </form>
       <p>
-        Não tem conta?? <Link to='/register'>Clique aqui!!!</Link>
+        Não tem conta? <Link to='/register'>Clique aqui!</Link>
       </p>
     </div>
   )
 }
 
-export default Login
+export default Login;

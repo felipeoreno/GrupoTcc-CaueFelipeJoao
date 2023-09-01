@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Context } from '../context/UserContext';
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -6,12 +7,8 @@ import api from '../utils/api';
 import Home from '../pages/Home';
 
 //componentes
-import Container from '../components/Container';
-import InputGroup from '../components/InputGroup';
-import NavBar from '../components/NavBar';
-import { Context } from '../context/UserContext';
 
-// Usuario 
+// Usuário 
 import Login from '../pages/User/Login';
 import Profile from '../pages/User/Profile';
 import Register from '../pages/User/Register';
@@ -20,16 +17,17 @@ import Register from '../pages/User/Register';
 import AddBook from '../pages/Books/AddBook';
 import BookDetails from '../pages/Books/BookDetails';
 import EditBook from '../pages/Books/EditBook';
+import MyBooks from '../pages/Books/MyBooks';
 
 
-function myRoutes() {
+function MyRoutes() {
   const { authenticated } = useContext(Context);
   const [user, setUser] = useState({});
 
   useEffect(() => {
-    if (!token) {
-      navigate('/');
-    } else {
+    const token = localStorage.getItem('token');
+
+    if (token) {
       api.get('/users/checkuser', {
         headers: {
           Authorization: `Bearer ${JSON.parse(token)}`
@@ -43,13 +41,11 @@ function myRoutes() {
   return (
     <>
       <Routes>
+        <Route exact path="/" element={<Home />} />
         {authenticated ? (
           <>
-            <Route exact path="/" element={<Home />} />
             <Route exact path="/user/profile" element={<Profile />} />
-
             <Route exact path="/books/:id" element={<BookDetails />} />
-            <Route exact path="/books/myadoptions" element={<MyAdoptions />} />
             <Route exact path="/books/mybooks" element={<MyBooks />} />
           </>
         ) : (
@@ -70,4 +66,4 @@ function myRoutes() {
   )
 }
 
-export default myRoutes;
+export default MyRoutes;

@@ -1,16 +1,16 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import Register from "./pages/User/Register";
-import Login from "./pages/User/Login";
-import Profile from "./pages/User/Profile";
+import { BrowserRouter as Router } from "react-router-dom";
+// import Home from "./pages/Home";
+// import Register from "./pages/User/Register";
+// import Login from "./pages/User/Login";
+// import Profile from "./pages/User/Profile";
 import NavBar from "./components/NavBar";
 import { UserProvider } from './context/UserContext'
 import Container from './components/Container'
-import AddBook from './pages/Books/AddBook'
-import BookDetails from './pages/Books/BookDetails'
-import MyAdoptions from "./pages/Books/MyAdoptions";
-import MyBooks from "./pages/Books/MyBooks";
-import myRoutes from "./Routes/route";
+// import AddBook from './pages/Books/AddBook'
+// import BookDetails from './pages/Books/BookDetails'
+// import MyAdoptions from "./pages/Books/MyAdoptions";
+// import MyBooks from "./pages/Books/MyBooks";
+import MyRoutes from "./Routes/route";
 
 
 function App() {
@@ -30,7 +30,7 @@ function App() {
               <Route exact path="/books/myadoptions" element={<MyAdoptions />} />
               <Route exact path="/books/mybooks" element={<MyBooks />} />
             </Routes> */}
-            <myRoutes />
+            <MyRoutes />
           </Container>
         </UserProvider>
       </Router>

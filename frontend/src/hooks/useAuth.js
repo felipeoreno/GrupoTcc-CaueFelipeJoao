@@ -1,20 +1,20 @@
-import api from '../utils/api'
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import api from '../utils/api';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function useAuth() {
   //useState() é um hook para alterar o estado de algo
-  const [authenticated, setAuthenticated] = useState(false)
+  const [authenticated, setAuthenticated] = useState(false);
   //useNavigate() é utilizado para redirecionar o usuario para uma rota 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token');
 
     if (token) {
       //JSON.parse() converte JSON em string
-      api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`
-      setAuthenticated(true)
+      api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
+      setAuthenticated(true);
     }
   }, [])
 

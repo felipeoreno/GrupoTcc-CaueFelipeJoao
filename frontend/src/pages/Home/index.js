@@ -1,41 +1,47 @@
 //index.js do HOME
-import React from 'react'
-import api from '../../utils/api'
+import React, { useContext } from 'react';
+import { Context } from '../../context/UserContext';
+import api from '../../utils/api';
 
-import { Link } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 function Home() {
-
-  const [pets, setPets] = useState([])
+  const [books, setBooks] = useState([]);
+  const { authenticated } = useContext(Context);
 
   useEffect(() => {
-    api.get('/pets').then((response) => {
-      setPets(response.data.pets)
+    api.get('/books').then((response) => {
+      setBooks(response.data.books)
     })
-  }, [])
+  }, []);
+
   return (
     <section>
       <div >
-        <h1>Adote um Pet</h1>
-        <p>Veja os detalhes de cada um e conheça o tutor deles</p>
+        <h1 className='fw-semibold'>Bem vindo à <b className='fw-bolder'>Comunidade de Livros Online</b></h1>
+        {authenticated ? (
+          <p>Veja o que há de novo no mundo dos Livros</p>
+        ) : (
+          <p>Crie sua conta e junte-se à comunidade!</p>
+        )}
       </div>
       <div className='d-flex justify-content-around flex-wrap'>
-        {pets.length > 0 ? (
-          pets.map((pet) => (
-            <figure className='card' style={{ width: '18rem' }} key={pet.id}>
+        {books.length > 0 ? (
+          books.map((book) => (
+            <figure className='card' style={{ width: '18rem' }} key={book.id}>
               <img
-                src={`http://localhost:5000/image/pets/${pet.ImagePets && pet.ImagePets[0] && pet.ImagePets[0].image}`}
+                src={`${book.thumbnail}`}
                 className='card-img-top'
-                style={{ height: '300px' }}
+                // style={{ height: '300px' }}
               />
               <figcaption className='card-body'>
-                <h3 className='card-title'>{pet.name}</h3>
+                <h3 className='card-title'>{book.name}</h3>
                 <p className='card-text'>
-                  <span>Peso:</span> {pet.weight}kg
+                  <span>Peso:</span> {book.weight}kg
                 </p>
-                {pet.available ? (
-                  <Link className="btn btn-warning" to={`/pet/${pet.id}`}>Mais detalhes</Link>
+                {book.available ? (
+                  <Link className="btn btn-warning" to={`/book/${book.id}`}>Mais detalhes</Link>
                 ) : (
                   <p className='card-text'>Adotado!</p>
                 )}
@@ -43,7 +49,7 @@ function Home() {
             </figure>
           ))
         ) : (
-          <p>Não há pets cadastrados ou disponíveis para adoção no momento!</p>
+          <p>Não há books cadastrados ou disponíveis para adoção no momento!</p>
         )}
       </div>
     </section>
