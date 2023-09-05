@@ -35,21 +35,21 @@ function BookDetails() {
 
     return (
         <div>
-            {book.name && (
+            {book.title && (
                 <section>
                     <div>
-                        <h3>Conhecendo o Book: {book.name}</h3>
+                        <h3>Conhecendo o Book: {book.title}</h3>
                         <p>Se tiver interesse, marque uma visita para conhece-lo</p>
                     </div>
                     <div>
-                        {book.ImageBooks && book.ImageBooks.length > 0 ? (
+                        {book.thumbnail && book.thumbnail.length > 0 ? (
                             book.ImageBooks.map((imageBook, index) => {
                                 const imageUrl = `http://localhost:5000/image/books/${imageBook.image}`
                                 return (
                                     <img
                                         key={index}
                                         src={imageUrl}
-                                        alt={book.name}
+                                        alt={book.title}
                                     />
                                 )
                             })

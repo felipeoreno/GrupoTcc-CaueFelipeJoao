@@ -33,14 +33,14 @@ function Home() {
               <img
                 src={`${book.thumbnail}`}
                 className='card-img-top'
-                // style={{ height: '300px' }}
+              style={{ width: '10rem' }}
               />
               <figcaption className='card-body'>
                 <h3 className='card-title'>{book.name}</h3>
                 <p className='card-text'>
                   <span>Peso:</span> {book.weight}kg
                 </p>
-                {book.available ? (
+                {!book.available ? (
                   <Link className="btn btn-warning" to={`/book/${book.id}`}>Mais detalhes</Link>
                 ) : (
                   <p className='card-text'>Adotado!</p>
