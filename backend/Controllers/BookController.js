@@ -96,8 +96,7 @@ module.exports = class BookController {
     } catch (error) {
       res.status(500).json({ message: error });
     }
-  }
-  //funcionando -- precisa corrigir a capa
+  } //funcionando -- precisa corrigir a capa
 
   /*==================VER TODOS LIVROS==================*/
   static async getAll(req, res) {
@@ -106,27 +105,8 @@ module.exports = class BookController {
     });
 
     res.status(200).json({ books: books });
-  }
-  //funcionando
+  } //funcionando
 
-  /*==================VER TODOS LIVROS DO USUÁRIO==================*/
-  static async getAllUserBooks(req, res) {
-    //encontrando o usuario logado
-    let currentUser
-    const token = getToken(req)
-    const decoded = jwt.verify(token, 'nossosecret')
-    currentUser = await User.findByPk(decoded.id)
-    currentUser.password = undefined
-    const currentUserId = currentUser.id
-
-    const userBooks = await UserBooks.findAll({
-      where: { UserId: currentUserId },
-      order: [['createdAt', 'DESC']]
-    })
-
-    res.status(200).json({ userBooks })
-  }
-  //funcionando (mas não mostra o nome dos livros ainda)
   /*==================VER LIVROS POR ISBN==================*/
   static async getBookById(req, res) {
     const id = req.params.id
@@ -136,7 +116,7 @@ module.exports = class BookController {
       return
     }
     //get book by id
-    const book = await Book.findByPk(id, { include: ImageBook });
+    const book = await Book.findByPk(id);
 
     //validando se o ID é valido
     if (!book) {
@@ -145,7 +125,7 @@ module.exports = class BookController {
     }
 
     res.status(200).json({ book: book })
-  }
+  } //funcionando
 
   /*==================REMOVER LIVROS POR ISBN==================*/
   static async removeBookById(req, res) {
@@ -181,7 +161,7 @@ module.exports = class BookController {
     await Book.destroy({ where: { id: id } });
 
     res.status(200).json({ message: 'Livro removido com sucesso' });
-  }
+  } //funcionando
 
   /*==================EDITAR LIVRO==================*/
   static async updateBook(req, res) {
@@ -328,13 +308,12 @@ module.exports = class BookController {
       });
 
       console.log('Livro adicionado à biblioteca, nova linha:', newUserBook);
-      res.status(200).json({ message: `Livro adicionado à biblioteca de ${currentUser.title}` })
+      res.status(200).json({ message: `Livro adicionado à biblioteca de ${currentUser.name}` })
     } catch (error) {
       console.error('Erro ao adicionar livro:', error);
       res.status(422).json({ message: `Erro ao adicionar livro à biblioteca: ${error}` });
     }
-  }
-  //funcionando
+  } //funcionando
 
   /*==================MESMA COISA==================*/
   /*static async concludeAdoption(req, res) {
@@ -378,6 +357,5 @@ module.exports = class BookController {
     });
 
     res.status(200).json({ books })
-  }
-  //funcionando
+  } //funcionando
 }

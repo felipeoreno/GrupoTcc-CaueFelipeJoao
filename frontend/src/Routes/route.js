@@ -10,6 +10,7 @@ import Home from '../pages/Home';
 
 // Usuário 
 import Login from '../pages/User/Login';
+import EditProfile from '../pages/User/EditProfile';
 import Profile from '../pages/User/Profile';
 import Register from '../pages/User/Register';
 
@@ -45,6 +46,7 @@ function MyRoutes() {
         {authenticated ? (
           <>
             <Route exact path="/user/profile" element={<Profile />} />
+            <Route exact path="/user/profile/edit" element={<EditProfile />} />
             <Route exact path="/books/:id" element={<BookDetails />} />
             <Route exact path="/books/mybooks" element={<MyBooks />} />
           </>
@@ -60,7 +62,7 @@ function MyRoutes() {
             <Route exact path="/books/create" element={<AddBook />} />
             <Route exact path="/books/edit" element={<EditBook />} />
           </>
-        ) : ('')}
+        ) : (null)}
       </Routes>
     </>
   )

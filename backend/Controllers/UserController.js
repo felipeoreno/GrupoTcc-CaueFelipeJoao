@@ -11,7 +11,7 @@ module.exports = class UserController {
   /*==================CRIAR USUÁRIO==================*/
   static async register(req, res) {
     const { name, email, password, phone, confirmpassword } = req.body;
-    let { level } = req.body;
+    let { image, level } = req.body;
 
     //validações
     if (!name) {
@@ -23,15 +23,15 @@ module.exports = class UserController {
       return;
     }
     if (!password) {
-      res.status(422).json({ message: 'O password é obrigatório' });
+      res.status(422).json({ message: 'A senha é obrigatória' });
       return;
     }
     if (!confirmpassword) {
-      res.status(422).json({ message: 'O confirmpassword é obrigatório' });
+      res.status(422).json({ message: 'Confirme a senha' });
       return;
     }
     if (!phone) {
-      res.status(422).json({ message: 'O phone é obrigatório' });
+      res.status(422).json({ message: 'O número de telefone é obrigatório' });
       return;
     }
     if(!level){
@@ -58,8 +58,9 @@ module.exports = class UserController {
     const user = new User({
       name: name,
       email: email,
-      phone: phone,
+      image: image,
       password: passwordHash,
+      phone: phone,
       level: level
     });
 
@@ -71,7 +72,7 @@ module.exports = class UserController {
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
-  }
+  } //funcionando
 
   /*==================FAZER LOGIN==================*/
   static async login(req, res) {
@@ -103,10 +104,10 @@ module.exports = class UserController {
     }
 
     await createUserToken(user, req, res);
-  }
+  } //funcionando
 
   /*==================VER PERFIL DO USUÁRIO==================*/
-  static async checkUser(req, res) {
+  static async checkCurrentUser(req, res) {
     let currentUser;
 
     if (req.headers.authorization) {
@@ -122,7 +123,7 @@ module.exports = class UserController {
     }
 
     res.status(200).send(currentUser);
-  }
+  } // 05/09 parei aqui
 
   /*==================VER PERFIL DO USUÁRIO POR ID==================*/
   static async getUserById(req, res) {

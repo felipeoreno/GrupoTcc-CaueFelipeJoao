@@ -8,7 +8,7 @@ const imageUpload = require('../helpers/image-upload')
 //rotas publicas
 router.post('/register', UserController.register)
 router.post('/login', UserController.login)
-router.get('/checkuser', UserController.checkUser)
+router.get('/checkuser', UserController.checkCurrentUser)
 router.get('/:id', UserController.getUserById)
 
 //rotas protegidas, só acessar caso esteja logado!!!
