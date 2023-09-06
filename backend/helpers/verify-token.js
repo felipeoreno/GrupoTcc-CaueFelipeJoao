@@ -22,6 +22,6 @@ function checkToken(req, res, next) {
   } catch (error) {
     return res.status(400).json({ message: 'Token Inválido' })
   }
-
 }
+
 module.exports = checkToken

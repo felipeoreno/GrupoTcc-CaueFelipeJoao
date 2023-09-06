@@ -7,7 +7,7 @@ function Profile() {
   const [user, setUser] = useState([]);
 
   useEffect(() => {
-    api.get('/mybooks').then((response) => {
+    api.get('users/checkuser').then((response) => {
       setUser(response.data.books)
     })
   }, []);
