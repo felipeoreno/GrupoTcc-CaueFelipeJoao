@@ -82,6 +82,7 @@ function EditProfile() {
           type='file'
           name='image'
           handleChange={onFileChange}
+          value={user.image}
         />
         <InputGroup
           type='text'
@@ -93,7 +94,7 @@ function EditProfile() {
         />
         <InputGroup
           type='email'
-          label='email'
+          label='E-mail'
           name='email'
           placeholder='Digite seu email'
           handleChange={handleChange}
@@ -101,24 +102,24 @@ function EditProfile() {
         />
         <InputGroup
           type='phone'
-          label='phone'
+          label='Telefone'
           name='phone'
-          placeholder='Digite seu phone'
+          placeholder='Digite seu telefone'
           handleChange={handleChange}
           value={user.phone}
         />
         <InputGroup
           type='password'
-          label='password'
+          label='Senha'
           name='password'
-          placeholder='Digite seu password'
+          placeholder='Digite sua senha'
           handleChange={handleChange}
         />
         <InputGroup
           type='password'
-          label='password'
+          label='Confirme a senha'
           name='confirmpassword'
-          placeholder='Digite seu password'
+          placeholder='Confirme a senha'
           handleChange={handleChange}
         />
         <button type='submit'>Atualizar</button>

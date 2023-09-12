@@ -1,4 +1,5 @@
 const User = require('../Model/User');
+const UserFollows = require('../Model/UserFollows');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -6,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const createUserToken = require('../helpers/create-user-token');
 const getToken = require('../helpers/get-token');
 const getUserById = require('../helpers/get-user-by-token');
+const changeFollowers = require('../helpers/change-followers');
 
 module.exports = class UserController {
   /*==================CRIAR USUÁRIO==================*/
@@ -15,6 +17,8 @@ module.exports = class UserController {
     let image = '';
     if (req.file) {
       image = req.file.filename;
+    } else {
+      image = 'standard.png';
     }
 
     //validações
@@ -232,6 +236,49 @@ module.exports = class UserController {
       res.status(500).json({ message: error.message });
     }
   } // funcionando
+
+  /*==================SEGUIR USUÁRIO==================*/
+  static async followUser(req, res) {
+    const followedUserId = req.params.id;
+
+    const followedUser = await User.findByPk(followedUserId);
+
+    if (!followedUser) {
+      res.status(404).json({ message: "Usuário não existe!" });
+      return;
+    }
+
+    let currentUser;
+    const token = getToken(req);
+    const decoded = jwt.verify(token, 'nossosecret');
+    currentUser = await User.findByPk(decoded.id);
+
+    const currentUserFollowing = await UserFollows.findAll({
+      where: {
+        followerId: currentUser.id
+      }
+    })
+
+    if (currentUserFollowing.some(userFollowing => userFollowing.followedId == followedUser.id)) {
+      res.status(422).json({ message: `Você já segue ${followedUser.name}!` });
+      return;
+    }
+
+    try {
+      const newUserFollowing = await UserFollows.create({
+        followerId: currentUser.id,
+        followedId: followedUser.id
+      });
+
+      changeFollowers(currentUser, followedUser, 1, 1);
+
+      console.log('Seguidor adicionado, nova linha: ', newUserFollowing);
+      res.status(200).json({ message: `Você está seguindo ${followedUser.name}!` });
+    } catch (error) {
+      console.error('Erro ao adicionar seguidor: ', error);
+      res.status(422).json({ message: `Erro ao seguir ${followedUser.name}: ${error}` });
+    }
+  }
 
   /*==================VER TODOS USUÁRIOS (PARA TESTE APENAS)==================*/
   static async getAll(req, res) {

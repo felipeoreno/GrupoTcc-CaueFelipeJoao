@@ -18,7 +18,7 @@ function Home() {
 
   return (
     <section>
-      <div >
+      <div>
         <h1 className='fw-semibold'>Bem vindo à <b className='fw-bolder'>Comunidade de Livros Online</b></h1>
         {authenticated ? (
           <p>Veja o que há de novo no mundo dos Livros</p>

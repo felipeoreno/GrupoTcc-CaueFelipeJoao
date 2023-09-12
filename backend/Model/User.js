@@ -25,6 +25,13 @@ const User = db.define('User', {
   },
   followers: {
     type: DataTypes.INTEGER,
+    defaultValue: 0,
+    autoIncrement: false
+  },
+  following: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+    autoIncrement: false
   },
   level: {
     type: DataTypes.TINYINT(1),

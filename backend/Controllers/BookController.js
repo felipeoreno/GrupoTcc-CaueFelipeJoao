@@ -307,10 +307,10 @@ module.exports = class BookController {
         rating: rating
       });
 
-      console.log('Livro adicionado à biblioteca, nova linha:', newUserBook);
-      res.status(200).json({ message: `Livro adicionado à biblioteca de ${currentUser.name}` })
+      console.log('Livro adicionado à biblioteca, nova linha: ', newUserBook);
+      res.status(200).json({ message: `Livro adicionado à biblioteca de ${currentUser.name}` });
     } catch (error) {
-      console.error('Erro ao adicionar livro:', error);
+      console.error('Erro ao adicionar livro: ', error);
       res.status(422).json({ message: `Erro ao adicionar livro à biblioteca: ${error}` });
     }
   } //funcionando

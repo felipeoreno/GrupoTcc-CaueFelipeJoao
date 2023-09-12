@@ -1,8 +1,8 @@
-//UserFollowers.js
+//UserFollows.js
 const { DataTypes } = require('sequelize')
 const db = require('../db/conn')
 
-const UserFollowers = db.define('UserFollowers', {
+const UserFollows = db.define('UserFollows', {
   id: {
     allowNull: false,
     autoIncrement: true,
@@ -21,16 +21,8 @@ const UserFollowers = db.define('UserFollowers', {
     references: {
       model: 'Users',
       key: 'id'
-    },
-  },
-  createdAt: {
-    allowNull: false,
-    type: DataTypes.DATE
-  },
-  updatedAt: {
-    allowNull: false,
-    type: DataTypes.DATE
+    }
   }
 })
 
-module.exports = UserFollowers
+module.exports = UserFollows

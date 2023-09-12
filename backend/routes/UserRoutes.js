@@ -12,7 +12,8 @@ router.get('/checkuser', verifyToken, UserController.checkCurrentUser)
 router.get('/:id', UserController.getUserById)
 
 //rotas protegidas, só acessar caso esteja logado!!!
-router.patch('/edit/', verifyToken, imageUpload.single('image'), UserController.editUser)
+router.patch('/edit', verifyToken, imageUpload.single('image'), UserController.editUser)
+router.post('/follow/:id', verifyToken, UserController.followUser)
 
 //rotas de teste
 router.get('/', UserController.getAll)
