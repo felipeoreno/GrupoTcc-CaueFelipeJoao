@@ -23,10 +23,25 @@ const User = db.define('User', {
     type: DataTypes.STRING,
     allowNull: false
   },
+  followers: {
+    type: DataTypes.INTEGER,
+  },
   level: {
     type: DataTypes.TINYINT(1),
     allowNull: false
   }
 })
+
+User.belongsToMany(User, {
+  as: 'Followers',
+  foreignKey: 'followerId',
+  through: 'UserFollowers'
+});
+
+User.belongsToMany(User, {
+  as: 'Following',
+  foreignKey: 'followedId',
+  through: 'UserFollowers'
+});
 
 module.exports = User
