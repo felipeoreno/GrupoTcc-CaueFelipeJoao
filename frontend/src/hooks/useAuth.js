@@ -19,22 +19,22 @@ function useAuth() {
   }, [])
 
   async function authUser(data) {
-    setAuthenticated(true)
-    localStorage.setItem('token', JSON.stringify(data.token))
-    navigate('/')
+    setAuthenticated(true);
+    localStorage.setItem('token', JSON.stringify(data.token));
+    navigate('/');
   }
 
   async function register(user) {
     try {
       const data = await api.post('/users/register', user)
         .then((response) => {
-          return response.data
+          return response.data;
         })
-      alert(data.message)
-      await authUser(data)
+      alert(data.message);
+      await authUser(data);
     } catch (error) {
-      console.log('Erro ao cadastrar ', error)
-      alert(error.response.data.message)
+      console.log('Erro ao cadastrar ', error);
+      alert(error.response.data.message);
     }
   }
 
@@ -42,26 +42,26 @@ function useAuth() {
     try {
       const data = await api.post('/users/login', user)
         .then((response) => {
-          return response.data
+          return response.data;
         })
-      alert(data.message)
-      await authUser(data)
-      navigate('user/profile')
+      // alert(data.message)
+      await authUser(data);
+      navigate('/');
     } catch (error) {
-      alert(error.response.data.message)
+      alert(error.response.data.message);
     }
   }
 
   function logout() {
-    setAuthenticated(false)
-    localStorage.removeItem('token')
-    api.defaults.headers.Authorization = undefined
-    navigate('/')
-    alert('Logout realizado com sucesso')
+    setAuthenticated(false);
+    localStorage.removeItem('token');
+    api.defaults.headers.Authorization = undefined;
+    navigate('/');
+    alert('Logout realizado com sucesso');
   }
 
-  return { authenticated, register, login, logout }
+  return { authenticated, register, login, logout };
 
 }
 
-export default useAuth
+export default useAuth;

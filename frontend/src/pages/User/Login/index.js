@@ -1,17 +1,16 @@
 //Login/index.js
-import React from 'react'
-import InputGroup from '../../../components/InputGroup'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import InputGroup from '../../../components/InputGroup';
+import { Link } from 'react-router-dom';
 
 //hooks
-import { useContext, useState } from 'react'
+import { useContext, useState } from 'react';
 //context
-import { Context } from '../../../context/UserContext'
+import { Context } from '../../../context/UserContext';
 
 
 function Login() {
   //aqui entra a lógica para o login
-
   const [user, setUser] = useState({});
   const { login } = useContext(Context);
 

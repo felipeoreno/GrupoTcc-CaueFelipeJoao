@@ -12,6 +12,10 @@ module.exports = class UserController {
   static async register(req, res) {
     const { name, email, password, phone, confirmpassword } = req.body;
     let { level } = req.body;
+    let image = '';
+    if (req.file) {
+      image = req.file.filename;
+    }
 
     //validações
     if (!name) {
@@ -23,18 +27,18 @@ module.exports = class UserController {
       return;
     }
     if (!password) {
-      res.status(422).json({ message: 'O password é obrigatório' });
+      res.status(422).json({ message: 'A senha é obrigatória' });
       return;
     }
     if (!confirmpassword) {
-      res.status(422).json({ message: 'O confirmpassword é obrigatório' });
+      res.status(422).json({ message: 'Confirme a senha' });
       return;
     }
     if (!phone) {
-      res.status(422).json({ message: 'O phone é obrigatório' });
+      res.status(422).json({ message: 'O número de telefone é obrigatório' });
       return;
     }
-    if(!level){
+    if (!level) {
       level = 0;
     }
     if (password !== confirmpassword) {
@@ -58,8 +62,9 @@ module.exports = class UserController {
     const user = new User({
       name: name,
       email: email,
-      phone: phone,
+      image: image,
       password: passwordHash,
+      phone: phone,
       level: level
     });
 
@@ -71,7 +76,7 @@ module.exports = class UserController {
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
-  }
+  } //funcionando
 
   /*==================FAZER LOGIN==================*/
   static async login(req, res) {
@@ -103,10 +108,10 @@ module.exports = class UserController {
     }
 
     await createUserToken(user, req, res);
-  }
+  } //funcionando
 
-  /*==================VER PERFIL DO USUÁRIO==================*/
-  static async checkUser(req, res) {
+  /*==================VER PERFIL DO USUÁRIO LOGADO==================*/
+  static async checkCurrentUser(req, res) {
     let currentUser;
 
     if (req.headers.authorization) {
@@ -118,11 +123,12 @@ module.exports = class UserController {
 
       currentUser.password = undefined;
     } else {
-      currentUser = null;
+      res.status(422).json({ message: 'Você não está logado. Faça login ou crie uma conta para ver seu perfil.' });
+      return;
     }
 
     res.status(200).send(currentUser);
-  }
+  } // funcionando
 
   /*==================VER PERFIL DO USUÁRIO POR ID==================*/
   static async getUserById(req, res) {
@@ -140,18 +146,25 @@ module.exports = class UserController {
     user.password = undefined;
 
     res.status(200).json({ user });
-  }
+  } // funcionando
 
   /*==================EDITAR USUÁRIO==================*/
   static async editUser(req, res) {
-    const id = req.params.id;
 
     //checar se o usuario exite
     const token = getToken(req);
-    const user = await getUserById(token);
+    const decoded = jwt.verify(token, 'nossosecret');
+    let currentUser;
+
+    if (decoded.id) {
+      currentUser = await User.findByPk(decoded.id);
+    } else {
+      res.status(422).json({ message: 'Login inválido.' });
+      return;
+    }
 
     //receber os dados nas variaves
-    const { name, email, phone, password, confirmpassword } = req.body;
+    const { name, email, phone, oldpassword, newpassword, confirmnewpassword } = req.body;
 
     //recebendo imagem do usuario
     let image = '';
@@ -159,38 +172,37 @@ module.exports = class UserController {
       image = req.file.filename;
     }
 
-    //validações de campos vazios 
+    //validações de campos vazios
     if (!name) {
       res.status(422).json({ message: 'O nome é obrigatório' });
       return;
     }
+
     if (!email) {
       res.status(422).json({ message: 'O email é obrigatório' });
       return;
     }
+
     const userExists = await User.findOne({ where: { email: email } });
-    if (user.email !== email && userExists) {
-      res.status(422).json({ message: 'Por favor utilize outro email' });
+    if (currentUser.email !== email && userExists) {
+      res.status(422).json({ message: 'Por favor utilize outro email.' });
       return;
     }
+
     if (!phone) {
       res.status(422).json({ message: 'O phone é obrigatório' });
       return;
     }
-    user.phone = phone;
 
-    if (password !== confirmpassword) {
-      res.status(422).json({ message: 'as senhas não batem' });
+    //checa se a senha antiga do usuário está correta
+    const checkPassword = await bcrypt.compare(oldpassword, currentUser.password);
+
+    if (!checkPassword) {
+      res.status(422).json({ message: 'Senha incorreta' });
       return;
-    } else if (password === confirmpassword && password != null) {
-      //criptografando senha
-      const salt = await bcrypt.genSalt(12);
-      const passwordHash = await bcrypt.hash(password, salt);
-
-      user.password = passwordHash;
     }
 
-    const userToUpdate = await User.findByPk(id);
+    const userToUpdate = await User.findByPk(currentUser.id);
 
     if (!userToUpdate) {
       res.status(422).json({ message: 'Usuario não encontrado' });
@@ -202,22 +214,24 @@ module.exports = class UserController {
     userToUpdate.phone = phone;
     userToUpdate.image = image;
 
-    if (password === confirmpassword && password != null) {
+    if (newpassword !== confirmnewpassword) {
+      res.status(422).json({ message: 'As senhas não batem' });
+      return;
+    } else if (newpassword === confirmnewpassword && newpassword != null) {
       //criptografando senha
       const salt = await bcrypt.genSalt(12);
-      const passwordHash = await bcrypt.hash(password, salt);
+      const passwordHash = await bcrypt.hash(newpassword, salt);
 
       userToUpdate.password = passwordHash;
     }
 
     try {
       await userToUpdate.save();
-      res.status(200).json({ message: 'usuario atualizado com sucesso' });
+      res.status(200).json({ message: 'Usuário atualizado com sucesso!' });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
-
-  }
+  } // funcionando
 
   /*==================VER TODOS USUÁRIOS (PARA TESTE APENAS)==================*/
   static async getAll(req, res) {
