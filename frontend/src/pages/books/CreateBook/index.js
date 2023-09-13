@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
-import InputGroup from '../../../components/InputGroup'
-import api from '../../../utils/api'
+import React, { useState } from 'react';
+import api from '../../../utils/api';
+import InputGroup from '../../../components/InputGroup';
+import SelectMultiple from '../../../components/SelectMultiple';
 
 function AddBook() {
   const [book, setBook] = useState({})
@@ -12,7 +13,37 @@ function AddBook() {
   }
 
   const [thumbnail, setThumbnail] = useState(null)
-  
+  const options = [
+    {
+      value: "1",
+      label: "Opção 1",
+    },
+    {
+      value: "2",
+      label: "Opção 2",
+    },
+    {
+      value: "3",
+      label: "Opção 3",
+    },
+    {
+      value: "3",
+      label: "Opção 3",
+    },
+    {
+      value: "3",
+      label: "Opção 3",
+    },
+    {
+      value: "3",
+      label: "Opção 3",
+    },
+    {
+      value: "3",
+      label: "Opção 3",
+    }
+  ];
+
   function onFileChange(e) {
     setPreview(URL.createObjectURL(e.target.files[0]))
     setThumbnail(e.target.files[0])
@@ -82,13 +113,18 @@ function AddBook() {
           placeholder='Digite aqui o nome'
           handleChange={handleChange}
         />
-        <InputGroup
+        {/* <InputGroup
           type='text'
           label='Digite as categorias do Livro'
           name='categories'
           placeholder='Digite aqui as categorias'
           handleChange={handleChange}
-        />
+        /> */}
+        <SelectMultiple
+          options={options}
+          name="categories"
+          label="Escolha as categorias do Livro"
+        ></SelectMultiple>
         <InputGroup
           type='text'
           label='Digite a descrição do Livro'

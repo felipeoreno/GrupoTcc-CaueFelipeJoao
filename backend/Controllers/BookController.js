@@ -23,6 +23,8 @@ module.exports = class BookController {
     let thumbnail = ''
     if (req.file) {
       thumbnail = req.file.filename
+    } else{
+      thumbnail = 'standardThumbnail.jpg';
     }
     console.log('imagem: ', thumbnail)
 

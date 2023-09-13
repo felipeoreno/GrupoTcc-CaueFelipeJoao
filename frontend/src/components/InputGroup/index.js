@@ -1,6 +1,6 @@
 //input group
 
-function InputGroup({ label, placeholder, type, name, handleChange, value }) {
+function InputGroup({ label, placeholder, type, name, handleChange, value, atribute1, atribute1Value, atribute2, atribute2Value }) {
   return (
     <div className='mb-3 form-floating'>
       <input
@@ -13,9 +13,9 @@ function InputGroup({ label, placeholder, type, name, handleChange, value }) {
         onChange={handleChange}
         value={value}
       />
-      <label for='form'>{label}</label>
+      <label htmlFor='form'>{label}</label>
     </div>
   )
 }
 
-export default InputGroup
+export default InputGroup //parei aqui 13/09
