@@ -15,7 +15,7 @@ import Profile from '../pages/User/Profile';
 import Register from '../pages/User/Register';
 
 // Livros
-import AddBook from '../pages/Books/AddBook';
+import AddBook from '../pages/Books/CreateBook';
 import BookDetails from '../pages/Books/BookDetails';
 import EditBook from '../pages/Books/EditBook';
 import MyBooks from '../pages/Books/MyBooks';
