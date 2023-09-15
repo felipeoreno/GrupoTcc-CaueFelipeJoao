@@ -48,7 +48,7 @@ function Home() {
             </div>
           ))
         ) : (
-          <p>Não há books cadastrados ou disponíveis para adoção no momento!</p>
+          <p>Não há Livros cadastrados!</p>
         )}
       </div>
     </section>
