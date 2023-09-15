@@ -18,4 +18,4 @@ function InputGroup({ label, placeholder, type, name, handleChange, value, atrib
   )
 }
 
-export default InputGroup //parei aqui 13/09
+export default InputGroup;
