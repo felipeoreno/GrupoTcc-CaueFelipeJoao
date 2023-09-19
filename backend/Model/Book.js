@@ -43,12 +43,12 @@ const Book = db.define('Book', {
     type: DataTypes.INTEGER,
     allowNull: true
   },
-  average_rating: {
-    type: DataTypes.DOUBLE,
-    allowNull: true
-  },
   num_pages: {
     type: DataTypes.INTEGER,
+    allowNull: true
+  },
+  average_rating: {
+    type: DataTypes.DOUBLE,
     allowNull: true
   },
   ratings_count: {

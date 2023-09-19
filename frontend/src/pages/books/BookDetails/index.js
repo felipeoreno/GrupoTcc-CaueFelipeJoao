@@ -35,26 +35,38 @@ function BookDetails() {
 
   return (
     <div>
-      <section>
-        <div>
+      <section className='row justify-content-between'>
+        <div className='col-5'>
           <h3>{book.title}</h3>
           {book.subtitle && book.subtitle.length > 0 ? (
             <p>{book.subtitle}</p>
           ) : (null)}
+          <ul className='list-group list-group-flush'>
+            <li className='list-group-item'>Autor: {book.authors}</li>
+            <li className='list-group-item'>Categorias: {book.categories}</li>
+            <li className='list-group-item'>Descrição: {book.description}</li>
+            <li className='list-group-item'>Ano de publicação: {book.published_year}</li>
+            <li className='list-group-item'>Avaliação: {book.average_rating} ({book.ratings_count})</li>
+          </ul>
         </div>
-        <div>
+        <div className='col-5'>
           <img
             key={null}
             src={book.thumbnail}
             alt={book.title}
+            style={{ height: '100%' }}
           />
         </div>
         {token ? (
-          <button onClick={addBook}>Solicitar uma Visita</button>
+          <div>
+            <button className='btn btn-primary mt-2 col-3' onClick={addBook}>Adicionar à biblioteca</button>
+          </div>
         ) : (
-          <p>
-            Você precisa <Link to='/register'>Criar uma conta</Link> para adicionar o Livro à sua biblioteca
-          </p>
+          <div>
+            <p>
+              Você precisa <Link to='/register'>Criar uma conta</Link> para adicionar o Livro à sua biblioteca
+            </p>
+          </div>
         )}
       </section>
     </div>

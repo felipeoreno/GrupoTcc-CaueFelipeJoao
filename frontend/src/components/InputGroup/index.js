@@ -12,6 +12,8 @@ function InputGroup({ label, placeholder, type, name, handleChange, value, atrib
         // toda vez que for lidar com eventos utilizar handle
         onChange={handleChange}
         value={value}
+        atribute1={atribute1Value}
+        atribute2={atribute2Value}
       />
       <label htmlFor='form'>{label}</label>
     </div>

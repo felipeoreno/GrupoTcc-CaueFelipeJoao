@@ -24,7 +24,7 @@ function NavBar() {
   }, []);
 
   return (
-    <nav className='navbar bg-warning'>
+    <nav className='navbar bg-warning mb-3'>
       <div className='container'>
         <Link className='navbar-brand'>Logo</Link>
         <div>

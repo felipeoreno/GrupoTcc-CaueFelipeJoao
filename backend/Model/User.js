@@ -1,6 +1,7 @@
 //User.js
-const { DataTypes } = require('sequelize')
-const db = require('../db/conn')
+const { DataTypes } = require('sequelize');
+const db = require('../db/conn');
+const BookRatings = require('./BookRatings');
 
 const User = db.define('User', {
   name: {
@@ -42,13 +43,19 @@ const User = db.define('User', {
 User.belongsToMany(User, {
   as: 'Followers',
   foreignKey: 'followerId',
-  through: 'UserFollowers'
+  through: 'UserFollows'
 });
 
 User.belongsToMany(User, {
   as: 'Following',
   foreignKey: 'followedId',
-  through: 'UserFollowers'
+  through: 'UserFollows'
+});
+
+User.belongsToMany(BookRatings, {
+  as: 'Following',
+  foreignKey: 'followedId',
+  through: 'UserFollows'
 });
 
 module.exports = User
