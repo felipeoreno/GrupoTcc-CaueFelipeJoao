@@ -19,7 +19,7 @@ const UserBooks = db.define('UserBooks', {
     type: DataTypes.BOOLEAN
   },
   rating: {
-    type: DataTypes.TINYINT(5)
+    type: DataTypes.DECIMAL(3, 2)
   }
 })
 

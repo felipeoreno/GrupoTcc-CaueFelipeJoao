@@ -2,8 +2,9 @@ const { DataTypes } = require('sequelize')
 const db = require('../db/conn')
 const User = require('./User')
 const UserBooks = require('./UserBooks')
+const BookRatings = require('./BookRatings')
 
-const Book = db.define('Book', {
+const Book = db.define('Books', {
   // id: {
   //   type: DataTypes.INTEGER,
   //   primaryKey: true,
@@ -71,6 +72,6 @@ const Book = db.define('Book', {
 })
 
 Book.belongsToMany(User, { through: UserBooks })
-// User.hasMany(Book)
+// Book.hasMany(User, {through: BookRatings})
 
 module.exports = Book

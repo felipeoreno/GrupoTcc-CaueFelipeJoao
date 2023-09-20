@@ -3,7 +3,7 @@ const { DataTypes } = require('sequelize');
 const db = require('../db/conn');
 const BookRatings = require('./BookRatings');
 
-const User = db.define('User', {
+const User = db.define('Users', {
   name: {
     type: DataTypes.STRING,
     allowNull: false
@@ -47,12 +47,6 @@ User.belongsToMany(User, {
 });
 
 User.belongsToMany(User, {
-  as: 'Following',
-  foreignKey: 'followedId',
-  through: 'UserFollows'
-});
-
-User.belongsToMany(BookRatings, {
   as: 'Following',
   foreignKey: 'followedId',
   through: 'UserFollows'

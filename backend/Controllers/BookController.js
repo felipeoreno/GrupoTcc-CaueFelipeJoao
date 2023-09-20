@@ -23,7 +23,7 @@ module.exports = class BookController {
     let thumbnail = ''
     if (req.file) {
       thumbnail = req.file.filename
-    } else{
+    } else {
       thumbnail = 'standardThumbnail.jpg';
     }
     console.log('imagem: ', thumbnail)
@@ -317,6 +317,79 @@ module.exports = class BookController {
     }
   } //funcionando
 
+  static async updateAddedBook(req, res) {
+    const bookId = req.params.id;
+    const { favorite, read, toRead, reading, reReading, rating } = req.body;
+    const updatedData = {};
+    const book = await Book.findByPk(bookId);
+
+    if (!book) {
+      res.status(404).json({ message: "Livro não existe!" });
+      return;
+    }
+
+    //pega o usuário no banco
+    let currentUser
+    const token = getToken(req)
+    const decoded = jwt.verify(token, 'nossosecret')
+    currentUser = await User.findByPk(decoded.id)
+
+    //pega os livros na biblioteca do usuário
+    const addedBook = await UserBooks.findAll({
+      where: {
+        UserId: currentUser.id,
+        BookId: bookId
+      }
+    })
+
+    //verifica se há dados novos a serem inseridos no campo do userbooks
+    if (favorite) {
+      updatedData.favorite = favorite;
+    } else {
+      updatedData.favorite = addedBook[0].favorite;
+    }
+
+    if (read) {
+      updatedData.read = read;
+    } else {
+      updatedData.read = addedBook[0].read;
+    }
+    if (toRead) {
+      updatedData.toRead = toRead;
+    } else {
+      updatedData.toRead = addedBook[0].toRead;
+    }
+    if (reading) {
+      updatedData.reading = reading;
+    } else {
+      updatedData.reading = addedBook[0].reading;
+    }
+    if (reReading) {
+      updatedData.reReading = reReading;
+    } else {
+      updatedData.reReading = addedBook[0].reReading;
+    }
+    if (rating) {
+      updatedData.rating = rating;
+    } else {
+      updatedData.rating = addedBook[0].rating;
+    }
+
+    try {
+      await UserBooks.update(updatedData, {
+        where: {
+          BookId: bookId,
+          UserId: currentUser.id
+        }
+      });
+      console.log('Atualizado Livro na biblioteca, nova linha: ', updatedData);
+      res.status(200).json({ message: `Atualizado Livro na biblioteca de ${currentUser.name}` });
+    } catch (error) {
+      console.error('Erro ao atualizar Livro: ', error);
+      res.status(422).json({ message: `Erro ao atualizar Livro: ${error}` });
+    }
+  } //funcionando
+
   /*==================MESMA COISA==================*/
   /*static async concludeAdoption(req, res) {
     const id = req.params.id;
@@ -360,4 +433,55 @@ module.exports = class BookController {
 
     res.status(200).json({ books })
   } //funcionando
+
+  static async rateBook(req, res) {
+    const bookId = req.params.id;
+    const { favorite, read, toRead, reading, reReading, rating } = req.body;
+
+    const book = await Book.findByPk(bookId);
+
+    if (!book) {
+      res.status(404).json({ message: "Livro não existe!" });
+      return;
+    }
+
+    //pega o usuário no banco
+    let currentUser
+    const token = getToken(req)
+    const decoded = jwt.verify(token, 'nossosecret')
+    currentUser = await User.findByPk(decoded.id)
+
+    //pega os livros na biblioteca do usuário
+    const currentUserBooks = await UserBooks.findAll({
+      // attributes: ['BookId'],
+      where: {
+        UserId: currentUser.id
+      }
+    })
+
+    //verifica se o livro selecionado pelo usuário já está na sua biblioteca
+    if (currentUserBooks.some(userBook => userBook.dataValues.BookId == bookId)) {
+      res.status(422).json({ message: "Você já adicionou o livro à sua biblioteca" });
+      return;
+    }
+
+    try {
+      const newUserBook = await UserBooks.create({
+        UserId: currentUser.id,
+        BookId: bookId,
+        favorite: favorite,
+        read: read,
+        toRead: toRead,
+        reading: reading,
+        reReading: reReading,
+        rating: rating
+      });
+
+      console.log('Livro adicionado à biblioteca, nova linha: ', newUserBook);
+      res.status(200).json({ message: `Livro adicionado à biblioteca de ${currentUser.name}` });
+    } catch (error) {
+      console.error('Erro ao adicionar livro: ', error);
+      res.status(422).json({ message: `Erro ao adicionar livro à biblioteca: ${error}` });
+    }
+  }
 }

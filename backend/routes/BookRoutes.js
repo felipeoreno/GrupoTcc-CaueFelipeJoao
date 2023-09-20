@@ -15,10 +15,10 @@ router.delete('/:id', verifyToken, BookController.removeBookById);
 router.patch('/:id', verifyToken/*, imageUpload.array('images')*/, BookController.updateBook);
 /** Adicionar livro à biblioteca do usuário */
 router.post('/addbook/:id', verifyToken, BookController.addBook);
-/** concluir  adoção */
-// router.patch('/conclude/:id', verifyToken, BookController.concludeAdoption)
 /* Livros na biblioteca do usuário */
 router.get('/mybooks', verifyToken, BookController.getAllUserBooks);
+//avaliar livro
+router.patch('/addedbook/:id', verifyToken, BookController.updateAddedBook);
 
 //---------------- rotas públicas ----------------
 /*listar todos os pets*/
