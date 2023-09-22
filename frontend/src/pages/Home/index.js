@@ -40,7 +40,7 @@ function Home() {
         )}
       </div>
       <div className='container d-flex justify-content-around flex-wrap row g-2'>
-        {books.length > 0 && user.level === 0 ? (
+        {books.length > 0 && user.level !== 0 ? (
           books.map((book) => (
             <div className='col-2' style={{ height: '20rem' }}>
               <figure className='card p-2' key={book.id} style={{ height: '10' }}>

@@ -91,15 +91,15 @@ module.exports = class UserController {
       return;
     }
 
-    if (!password) {
-      res.status(422).json({ message: 'O password é obrigatório' });
-      return;
-    }
-
     const user = await User.findOne({ where: { email: email } });
 
     if (!user) {
-      res.status(422).json({ message: 'Email não encontrado' });
+      res.status(422).json({ message: 'Não existe um usuário com este e-mail' });
+      return;
+    }
+
+    if (!password) {
+      res.status(422).json({ message: 'A senha é obrigatória' });
       return;
     }
 

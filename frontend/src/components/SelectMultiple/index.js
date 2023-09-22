@@ -1,18 +1,6 @@
 //select multiple
-import React, { useState } from "react";
 
-function SelectMultiple({ options, name, label }) {
-  const [selectedOptions, setSelectedOptions] = useState([]);
-
-  function handleChange(e) {
-    const selectedOption = e.target.value;
-
-    if (selectedOptions.includes(selectedOption)) {
-      setSelectedOptions(selectedOptions.filter((option) => option !== selectedOption));
-    } else {
-      setSelectedOptions([...selectedOptions, selectedOption]);
-    }
-  };
+function SelectMultiple({ options, name, label, handleChange, selectedOptions }) {
 
   return (
     <div className="mb-3">

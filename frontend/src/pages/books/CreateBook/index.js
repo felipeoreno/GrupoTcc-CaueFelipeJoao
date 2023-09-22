@@ -12,6 +12,24 @@ function AddBook() {
     setBook({ ...book, [e.target.name]: e.target.value })
   }
 
+  const [selectedOptions, setSelectedOptions] = useState();
+
+  function selectHandleChange(e) {
+    console.log("selectedOptions: ", selectedOptions)
+    console.log("target name: ", e.target.name)
+    console.log("target value: ", e.target.value)
+    const selectedOption = e.target.value;
+    console.log("selectedOption: ", selectedOption)
+
+    if (selectedOptions.includes(selectedOption)) {
+      setSelectedOptions(selectedOptions.filter((option) => option !== selectedOption));
+      console.log("selectedOptions1: ", selectedOptions)
+    } else {
+      setSelectedOptions(...selectedOptions, {[e.target.name]: selectedOption});
+      console.log("selectedOptions2: ", selectedOptions)
+    }
+  }; //parei aqui 22/09
+
   const [thumbnail, setThumbnail] = useState(null)
   const options = [
     {
@@ -27,19 +45,19 @@ function AddBook() {
       label: "Opção 3",
     },
     {
-      value: "3",
+      value: "4",
       label: "Opção 3",
     },
     {
-      value: "3",
+      value: "5",
       label: "Opção 3",
     },
     {
-      value: "3",
+      value: "6",
       label: "Opção 3",
     },
     {
-      value: "3",
+      value: "7",
       label: "Opção 3",
     }
   ];
@@ -64,7 +82,7 @@ function AddBook() {
     const data = await api.post(`books/create`, formData, {
       headers: {
         Authorization: `Bearer ${JSON.parse(token)}`,
-        'Content-Type': 'multipart/form-data'
+        'Content-Type': 'application/json'
       }
     }).then((response) => {
       return response.data
@@ -124,6 +142,8 @@ function AddBook() {
           options={options}
           name="categories"
           label="Escolha as categorias do Livro"
+          handleChange={selectHandleChange}
+          selectedOptions={selectedOptions}
         ></SelectMultiple>
         <InputGroup
           type='text'

@@ -1,8 +1,9 @@
-const router = require('express').Router()
-const UserController = require('../Controllers/UserController')
+const router = require('express').Router();
+const UserController = require('../Controllers/UserController');
 //helpers
-const verifyToken = require('../helpers/verify-token')
-const imageUpload = require('../helpers/image-upload')
+const verifyLevel = require('../helpers/verify-level');
+const verifyToken = require('../helpers/verify-token');
+const imageUpload = require('../helpers/image-upload');
 
 //rota para criar "registrar" um usuario
 //rotas publicas

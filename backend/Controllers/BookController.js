@@ -14,6 +14,17 @@ module.exports = class BookController {
     console.log('req:', req.body);
     console.log('file: ', req.file);
 
+    //pegando o usuário
+    let currentUser;
+    const token = getToken(req);
+    const decoded = jwt.verify(token, 'nossosecret');
+    currentUser = await User.findByPk(decoded.id);
+
+    if (currentUser.level !== 1) {
+      res.status(422).json({ message: "Você não tem permissão para executar esta ação!" });
+      return;
+    }
+
     const { isbn, title, subtitle, categories, published_year, num_pages } = req.body;
     let { authors, description } = req.body;
     console.log('id: ', isbn);
@@ -131,6 +142,20 @@ module.exports = class BookController {
 
   /*==================REMOVER LIVROS POR ISBN==================*/
   static async removeBookById(req, res) {
+
+    //checar se o usuario logado tem permissão para excluir
+    let currentUser;
+    const token = getToken(req);
+    const decoded = jwt.verify(token, 'nossosecret');
+    currentUser = await User.findByPk(decoded.id);
+    currentUser.password = undefined;
+    const currentUserLevel = currentUser.level;
+
+    if (currentUserLevel !== 1) {
+      res.status(422).json({ message: 'Você não tem permissão para executar esta ação' });
+      return;
+    }
+
     const id = req.params.id;
 
     if (isNaN(id)) {
@@ -147,19 +172,6 @@ module.exports = class BookController {
       return;
     }
 
-    //checar se o usuario logado registrou o book
-    let currentUser;
-    const token = getToken(req);
-    const decoded = jwt.verify(token, 'nossosecret');
-    currentUser = await User.findByPk(decoded.id);
-    currentUser.password = undefined;
-    const currentUserLevel = currentUser.level;
-
-    if (currentUserLevel !== 1) {
-      res.status(422).json({ message: 'Você não tem permissão para executar esta ação' });
-      return;
-    }
-
     await Book.destroy({ where: { id: id } });
 
     res.status(200).json({ message: 'Livro removido com sucesso' });
@@ -170,6 +182,13 @@ module.exports = class BookController {
     const bookId = req.params.id;
     const { isbn, title, subtitle, categories, published_year, num_pages } = req.body;
     let { authors, description } = req.body;
+
+    let thumbnail = '';
+    if (req.file) {
+      thumbnail = req.file.filename;
+    } else {
+      thumbnail = 'standardThumbnail.jpg';
+    }
 
     const updatedData = {}
     const book = await Book.findByPk(bookId);
