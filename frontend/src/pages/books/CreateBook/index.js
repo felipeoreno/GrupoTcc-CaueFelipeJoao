@@ -12,22 +12,38 @@ function AddBook() {
     setBook({ ...book, [e.target.name]: e.target.value })
   }
 
-  const [selectedOptions, setSelectedOptions] = useState();
+  const [selectedOptions, setSelectedOptions] = useState(new Set());
 
   function selectHandleChange(e) {
+    // console.log("selectedOptions: ", selectedOptions)
+    // console.log("target name: ", e.target.name)
+    // console.log("target value: ", e.target.value)
+    // const selectedOption = e.target.value;
+    // console.log("selectedOption: ", selectedOption)
+
+    // if (selectedOptions.has(selectedOption)) {
+    //   setSelectedOptions(selectedOptions.filter((option) => option !== selectedOption));
+    //   console.log("selectedOptions1: ", selectedOptions)
+    // } else {
+    //   setSelectedOptions(...selectedOptions, {[e.target.name]: selectedOption});
+    //   console.log("selectedOptions2: ", selectedOptions)
+    // }
+
     console.log("selectedOptions: ", selectedOptions)
     console.log("target name: ", e.target.name)
     console.log("target value: ", e.target.value)
     const selectedOption = e.target.value;
-    console.log("selectedOption: ", selectedOption)
+    // console.log("selectedOption: ", selectedOption):
 
-    if (selectedOptions.includes(selectedOption)) {
-      setSelectedOptions(selectedOptions.filter((option) => option !== selectedOption));
+    if (selectedOptions.has(selectedOption)) {
+      selectedOptions.delete(selectedOption);
       console.log("selectedOptions1: ", selectedOptions)
-    } else {
-      setSelectedOptions(...selectedOptions, {[e.target.name]: selectedOption});
+  } else {
+      selectedOptions.add(selectedOption);
       console.log("selectedOptions2: ", selectedOptions)
-    }
+  }
+
+    setSelectedOptions(new Set(selectedOptions));
   }; //parei aqui 22/09
 
   const [thumbnail, setThumbnail] = useState(null)
