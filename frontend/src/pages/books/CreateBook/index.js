@@ -2,81 +2,181 @@ import React, { useState } from 'react';
 import api from '../../../utils/api';
 import InputGroup from '../../../components/InputGroup';
 import SelectMultiple from '../../../components/SelectMultiple';
+import Select from 'react-select';
 
 function AddBook() {
-  const [book, setBook] = useState({})
+  const [book, setBook] = useState({ categories: [] })
   const [preview, setPreview] = useState()
   const [token] = useState(localStorage.getItem('token') || '')
 
   function handleChange(e) {
-    setBook({ ...book, [e.target.name]: e.target.value })
+    if (e.target) {
+      setBook({ ...book, [e.target.name]: e.target.value });
+    } else {
+      // Handle the categories (multiple selection)
+      const selectedCategories = e.map(option => option.value);
+      setBook({ ...book, categories: selectedCategories });
+    }
   }
 
-  const [selectedOptions, setSelectedOptions] = useState(new Set());
+  // const [selectedOptions, setSelectedOptions] = useState(new Set());
 
-  function selectHandleChange(e) {
-    // console.log("selectedOptions: ", selectedOptions)
-    // console.log("target name: ", e.target.name)
-    // console.log("target value: ", e.target.value)
-    // const selectedOption = e.target.value;
-    // console.log("selectedOption: ", selectedOption)
+  // function selectHandleChange(e) {
+  //   // console.log("selectedOptions: ", selectedOptions)
+  //   // console.log("target name: ", e.target.name)
+  //   // console.log("target value: ", e.target.value)
+  //   // const selectedOption = e.target.value;
+  //   // console.log("selectedOption: ", selectedOption)
 
-    // if (selectedOptions.has(selectedOption)) {
-    //   setSelectedOptions(selectedOptions.filter((option) => option !== selectedOption));
-    //   console.log("selectedOptions1: ", selectedOptions)
-    // } else {
-    //   setSelectedOptions(...selectedOptions, {[e.target.name]: selectedOption});
-    //   console.log("selectedOptions2: ", selectedOptions)
-    // }
+  //   // if (selectedOptions.has(selectedOption)) {
+  //   //   setSelectedOptions(selectedOptions.filter((option) => option !== selectedOption));
+  //   //   console.log("selectedOptions1: ", selectedOptions)
+  //   // } else {
+  //   //   setSelectedOptions(...selectedOptions, {[e.target.name]: selectedOption});
+  //   //   console.log("selectedOptions2: ", selectedOptions)
+  //   // }
 
-    console.log("selectedOptions: ", selectedOptions)
-    console.log("target name: ", e.target.name)
-    console.log("target value: ", e.target.value)
-    const selectedOption = e.target.value;
-    // console.log("selectedOption: ", selectedOption):
+  //   console.log("selectedOptions: ", selectedOptions)
+  //   console.log("target name: ", e.target.name)
+  //   console.log("target value: ", e.target.value)
+  //   const selectedOption = e.target.value;
+  //   // console.log("selectedOption: ", selectedOption):
 
-    if (selectedOptions.has(selectedOption)) {
-      selectedOptions.delete(selectedOption);
-      console.log("selectedOptions1: ", selectedOptions)
-  } else {
-      selectedOptions.add(selectedOption);
-      console.log("selectedOptions2: ", selectedOptions)
-  }
+  //   if (selectedOptions.has(selectedOption)) {
+  //     selectedOptions.delete(selectedOption);
+  //     console.log("selectedOptions1: ", selectedOptions)
+  //   } else {
+  //     selectedOptions.add(selectedOption);
+  //     console.log("selectedOptions2: ", selectedOptions)
+  //   }
 
-    setSelectedOptions(new Set(selectedOptions));
-  }; //parei aqui 22/09
+  //   setSelectedOptions(new Set(selectedOptions));
+  // };
 
   const [thumbnail, setThumbnail] = useState(null)
+
   const options = [
     {
-      value: "1",
-      label: "Opção 1",
+      value: 'Fantasia',
+      label: 'Fantasia',
     },
     {
-      value: "2",
-      label: "Opção 2",
+      value: 'Ficção científica',
+      label: 'Ficção científica',
     },
     {
-      value: "3",
-      label: "Opção 3",
+      value: 'Ação e aventura',
+      label: 'Ação e aventura',
     },
     {
-      value: "4",
-      label: "Opção 3",
+      value: 'Horror',
+      label: 'Horror',
     },
     {
-      value: "5",
-      label: "Opção 3",
+      value: 'Distopia',
+      label: 'Distopia',
     },
     {
-      value: "6",
-      label: "Opção 3",
+      value: 'Romance',
+      label: 'Romance',
     },
     {
-      value: "7",
-      label: "Opção 3",
+      value: 'Conto',
+      label: 'Conto',
+    },
+    {
+      value: 'Infantil',
+      label: 'Infantil',
+    },
+    {
+      value: 'Infanto-juvenil',
+      label: 'Infanto-juvenil',
+    },
+    {
+      value: 'Clássicos',
+      label: 'Clássicos',
+    },
+    {
+      value: 'Humor e comédia',
+      label: 'Humor e comédia',
+    },
+    {
+      value: 'Arte',
+      label: 'Arte',
+    },
+    {
+      value: 'História',
+      label: 'História',
+    },
+    {
+      value: 'Música',
+      label: 'Música',
+    },
+    {
+      value: 'Filosofia',
+      label: 'Filosofia',
+    },
+    {
+      value: 'Ciência Política e Atualidades',
+      label: 'Ciência Política e Atualidades',
+    },
+    {
+      value: 'LGBTQIA+',
+      label: 'LGBTQIA+',
+    },
+    {
+      value: 'Cultural e étnico',
+      label: 'Cultural e étnico',
+    },
+    {
+      value: 'Religião e Espiritualidade',
+      label: 'Religião e Espiritualidade',
+    },
+    {
+      value: 'Biografias e memórias',
+      label: 'Biografias e memórias',
+    },
+    {
+      value: 'Viagem',
+      label: 'Viagem',
     }
   ];
+  // // const options = [
+  // //   {
+  // //     value: '1',
+  // //     label: 'Opcao 1',
+  // //   },
+  // //   {
+  // //     value: '2',
+  // //     label: 'Opcao 2',
+  // //   },
+  // //   {
+  // //     value: '3',
+  // //     label: 'Opcao 3',
+  // //   },
+  // //   {
+  // //     value: '4',
+  // //     label: 'Opcao 3',
+  // //   },
+  // //   {
+  // //     value: '5',
+  // //     label: 'Opcao 3',
+  // //   },
+  // //   {
+  // //     value: '6',
+  // //     label: 'Opcao 3',
+  // //   },
+  // //   {
+  // //     value: '7',
+  // //     label: 'Opcao 3',
+  // //   }
+  // // ];
+  // const options = [
+  //   { value: 'chocolate', label: 'Chocolate' },
+  //   { value: 'strawberry', label: 'Strawberry' },
+  //   { value: 'vanilla', label: 'Vanilla' }
+  // ]
+  // console.log("options: ", options)
 
   function onFileChange(e) {
     setPreview(URL.createObjectURL(e.target.files[0]))
@@ -87,14 +187,14 @@ function AddBook() {
     e.preventDefault()
 
     const formData = new FormData()
-
+    console.log("thumbnail: ", thumbnail)
+  // parei aqui 03/10
     if (thumbnail) {
       formData.append('thumbnail', thumbnail)
     }
 
     //montando objeto com o formulario
     await Object.keys(book).forEach((key) => formData.append(key, book[key]))
-
     const data = await api.post(`books/create`, formData, {
       headers: {
         Authorization: `Bearer ${JSON.parse(token)}`,
@@ -147,20 +247,11 @@ function AddBook() {
           placeholder='Digite aqui o nome'
           handleChange={handleChange}
         />
-        {/* <InputGroup
-          type='text'
-          label='Digite as categorias do Livro'
-          name='categories'
-          placeholder='Digite aqui as categorias'
-          handleChange={handleChange}
-        /> */}
         <SelectMultiple
+          placeholder='Escolha as categorias do livro'
+          handleChange={handleChange}
           options={options}
-          name="categories"
-          label="Escolha as categorias do Livro"
-          handleChange={selectHandleChange}
-          selectedOptions={selectedOptions}
-        ></SelectMultiple>
+        />
         <InputGroup
           type='text'
           label='Digite a descrição do Livro'

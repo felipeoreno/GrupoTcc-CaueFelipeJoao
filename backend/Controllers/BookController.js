@@ -11,7 +11,7 @@ const jwt = require('jsonwebtoken')
 module.exports = class BookController {
   /*==================CRIAR LIVRO==================*/
   static async create(req, res) {
-    console.log('req:', req.body);
+    console.log('--------INICIO----------\nreq:', req);
     console.log('file: ', req.file);
 
     //pegando o usuário
@@ -76,6 +76,16 @@ module.exports = class BookController {
     // const decoded = jwt.verify(token, 'nossosecret')
     // currentUser = await User.findByPk(decoded.id)
 
+      // const image = req.files;
+// if (image && image.length > 0) {
+      //   // Save each image to the ImageBook table
+      //   for (let i = 0; i < images.length; i++) {
+      //     const filename = images.filename;
+      //     const newBookThumbnail = new ImageBook({ image: filename, BookId: newBook.id });
+      //     await newBookThumbnail.save();
+      //   }
+      // }
+      
     //criando o livro
     const book = new Book({
       id: isbn,
@@ -88,20 +98,20 @@ module.exports = class BookController {
       published_year: published_year,
       num_pages: num_pages
     });
-
+    
     try {
       // Save the book to the database
       const newBook = await book.save();
 
       // PODE SER USADO DEPOIS PRA EXIBIR MAIS FOTOS DO LIVRO
       // Handle image uploads
-      // const images = req.files;
-      // if (images && images.length > 0) {
+      // const image = req.files;
+      // if (image && image.length > 0) {
       //   // Save each image to the ImageBook table
       //   for (let i = 0; i < images.length; i++) {
-      //     const filename = images[i].filename;
-      //     const newImageBook = new ImageBook({ image: filename, BookId: newBook.id });
-      //     await newImageBook.save();
+      //     const filename = images.filename;
+      //     const newBookThumbnail = new ImageBook({ image: filename, BookId: newBook.id });
+      //     await newBookThumbnail.save();
       //   }
       // }
 

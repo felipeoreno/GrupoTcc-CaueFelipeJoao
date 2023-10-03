@@ -1,27 +1,29 @@
 //select multiple
+import Select from 'react-select';
 
-function SelectMultiple({ options, name, label, handleChange, selectedOptions }) {
+function SelectMultiple({ handleChange, placeholder, options }) {
+  const selectStyles = {
+    menu: base => ({
+      ...base,
+      zIndex: 100
+    })
+  };
+
+  // export default () => 
 
   return (
-    <div className="mb-3">
-      <label className="ms-2" htmlFor={name}>{label}</label>
-      <select
-        className="form-select"
-        multiple={true}
-        id={name}
-        name={name}
-        // style={{ backgroundColor: "red" }}
-        value={selectedOptions}
-        onChange={handleChange}
-      >
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </div>
+    <Select
+      placeholder={placeholder}
+      isMulti
+      name={"categories"}
+      options={options}
+      className="basic-multi-select mb-3"
+      classNamePrefix="select"
+      styles={selectStyles}
+      onChange={handleChange}
+    />
   );
-};
+}
 
-export default SelectMultiple;
+
+export default SelectMultiple
