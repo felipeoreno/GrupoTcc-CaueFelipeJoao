@@ -31,65 +31,42 @@ function MyBooks() {
 
     alert(data.message)
   }
-
-  async function concludeAdoption(id) {
-    const data = await api.patch(`/books/conclude/${id}`, {
-      headers: {
-        Authorization: `Bearer ${JSON.parse(token)}`
-      }
-    }).then((response) => {
-      return response.data
-    }).catch((err) => {
-      return err.response.data
-    })
-    alert(data.message)
-  }
-
+  books.map((book) => (
+    console.log(book)
+  ))
   return (
     <section className='container'>
       <div>
         <h3>Minha Biblioteca</h3>
-        {/* <Link to='/book/add'>Cadastrar Book</Link> */}
       </div>
       <div className='d-flex justify-content-around flex-wrap'>
         {books.length > 0 &&
           books.map((book) => (
+            <div className='col-2' style={{ height: '25rem' }}>
             <figure
-              key={book.id}
-              className='card'
-              style={{ width: '18rem' }}
+              key={book[0].id}
+              className='card p-2'
+              style={{ height: '22rem', width: '18rem' }}
             >
               <img
-                src={`${book.thumbnail}`}
-                alt={book.name}
+                src={`${book[0].thumbnail}`}
+                alt={book[0].title}
                 className='card-img-top'
-                style={{ height: '300px' }}
               />
               <figcaption className='card-body'>
-                <h5 className='card-title'>{book.name}</h5>
+                <h5 className='card-title'>{book[0].title}</h5>
                 <div>
-                  {book.available ? (
-                    <>
-                      {book.adopter && (
-                        <button
-                          onClick={() => { concludeAdoption(book.id) }}
-                          className='btn btn-info'
-                        >Concluir adoção</button>
-                      )}
-                      <Link className='btn btn-warning' >Editar</Link>
-                      <button
-                        onClick={() => { removeBook(book.id) }}
-                        className='btn btn-danger'
-                      >Excluir</button>
-                    </>
-                  ) : (
-                    <p>Book já adotado</p>
-                  )}
+                  <Link className='btn btn-warning fs-7' >Editar</Link>
+                  <button
+                    onClick={() => { removeBook(book[0].id) }}
+                    className='btn btn-danger'
+                  >Excluir</button>
                 </div>
               </figcaption>
             </figure>
+            </div>
           ))}
-        {books.length === 0 && <p>Ainda não há books cadastrados</p>}
+        {books.length === 0 && <p>Ainda não há Livros na sua biblioteca</p>}
       </div>
     </section>
   )

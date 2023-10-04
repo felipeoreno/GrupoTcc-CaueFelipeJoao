@@ -2,7 +2,6 @@ const { DataTypes } = require('sequelize')
 const db = require('../db/conn')
 const User = require('./User')
 const UserBooks = require('./UserBooks')
-const BookRatings = require('./BookRatings')
 
 const Book = db.define('Books', {
   // id: {
@@ -72,6 +71,5 @@ const Book = db.define('Books', {
 })
 
 Book.belongsToMany(User, { through: UserBooks })
-// Book.hasMany(User, {through: BookRatings})
 
 module.exports = Book

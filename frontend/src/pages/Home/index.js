@@ -28,9 +28,8 @@ function Home() {
     }
   }, []);
 
-
   return (
-    <section>
+    <section className="container">
       <div>
         <h1 className='fw-semibold'>Bem vindo à <b className='fw-bolder'>Comunidade de Livros Online</b></h1>
         {authenticated ? (
@@ -42,8 +41,8 @@ function Home() {
       <div className='container d-flex justify-content-around flex-wrap row g-2'>
         {books.length > 0 && user.level !== 0 ? (
           books.map((book) => (
-            <div className='col-2' style={{ height: '20rem' }}>
-              <figure className='card p-2' key={book.id} style={{ height: '10' }}>
+            <div key={book.id} className='col-2' style={{ height: '25rem' }}>
+              <figure className='card p-2' key={book.id} style={{ height: '22rem' }}>
                 <Link to={`/books/${book.id}`}>
                   <img
                     src={`${book.thumbnail}`}

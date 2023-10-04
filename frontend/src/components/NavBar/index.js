@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import api from '../../utils/api';
 //Contexto
 import { Context } from '../../context/UserContext';
 
 function NavBar() {
+  const location = useLocation();
   const { authenticated, logout } = useContext(Context)
   const [user, setUser] = useState({});
 
@@ -24,10 +25,13 @@ function NavBar() {
   }, []);
 
   return (
-    <nav className='navbar bg-warning mb-3'>
+    <nav className='navbar navbar-expand bg-info mb-3'>
       <div className='container'>
-        <Link className='navbar-brand'>Logo</Link>
-        <div>
+        <Link className='navbar-brand'>Com. Livros</Link>
+        <button className='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbar_links'>
+          <span className='navbar-toggler-icon'></span>
+        </button>
+        <div className='collapse navbar-collapse justify-content-end' id='navbar_links'>
           <ul className='navbar nav'>
             <li className='nav-item'>
               <Link className='nav-link' to='/'>Home</Link>
@@ -45,6 +49,9 @@ function NavBar() {
               <>
                 <li className='nav-item'>
                   <Link className='nav-link' to='/user/profile'>Perfil</Link>
+                </li>
+                <li className='nav-item'>
+                  <Link className='nav-link' to='/books/mybooks'>Meus Livros</Link>
                 </li>
                 <li className='nav-item'>
                   <Link className='nav-link' to='/books/create'>Cadastrar Livro</Link>

@@ -3,13 +3,13 @@ import { useParams, Link } from 'react-router-dom';
 import api from '../../../utils/api';
 
 function BookDetails() {
-
   const [book, setBook] = useState({});
   const { id } = useParams();
-
   const [token] = useState(localStorage.getItem('token') || '');
 
   useEffect(() => {
+console.log("ID: ", id)
+
     api.get(`/books/${id}`).then((response) => {
       setBook(response.data.book)
     })
@@ -42,11 +42,11 @@ function BookDetails() {
             <p>{book.subtitle}</p>
           ) : (null)}
           <ul className='list-group list-group-flush'>
-            <li className='list-group-item'>Autor: {book.authors}</li>
-            <li className='list-group-item'>Categorias: {book.categories}</li>
-            <li className='list-group-item'>Descrição: {book.description}</li>
-            <li className='list-group-item'>Ano de publicação: {book.published_year}</li>
-            <li className='list-group-item'>Avaliação: {book.average_rating} ({book.ratings_count})</li>
+            <li key='authors' className='list-group-item'>Autor: {book.authors}</li>
+            <li key='categories' className='list-group-item'>Categorias: {book.categories}</li>
+            <li key='description' className='list-group-item'>Descrição: {book.description}</li>
+            <li key='published_year' className='list-group-item'>Ano de publicação: {book.published_year}</li>
+            <li key='ratings_count' className='list-group-item'>Avaliação: {book.average_rating} ({book.ratings_count})</li>
           </ul>
         </div>
         <div className='col-5'>

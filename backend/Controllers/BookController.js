@@ -76,16 +76,16 @@ module.exports = class BookController {
     // const decoded = jwt.verify(token, 'nossosecret')
     // currentUser = await User.findByPk(decoded.id)
 
-      // const image = req.files;
-// if (image && image.length > 0) {
-      //   // Save each image to the ImageBook table
-      //   for (let i = 0; i < images.length; i++) {
-      //     const filename = images.filename;
-      //     const newBookThumbnail = new ImageBook({ image: filename, BookId: newBook.id });
-      //     await newBookThumbnail.save();
-      //   }
-      // }
-      
+    // const image = req.files;
+    // if (image && image.length > 0) {
+    //   // Save each image to the ImageBook table
+    //   for (let i = 0; i < images.length; i++) {
+    //     const filename = images.filename;
+    //     const newBookThumbnail = new ImageBook({ image: filename, BookId: newBook.id });
+    //     await newBookThumbnail.save();
+    //   }
+    // }
+
     //criando o livro
     const book = new Book({
       id: isbn,
@@ -98,7 +98,7 @@ module.exports = class BookController {
       published_year: published_year,
       num_pages: num_pages
     });
-    
+
     try {
       // Save the book to the database
       const newBook = await book.save();
@@ -455,11 +455,18 @@ module.exports = class BookController {
     const decoded = jwt.verify(token, 'nossosecret')
     currentUser = await User.findByPk(decoded.id)
 
-    const books = await UserBooks.findAll({
+    const userBooks = await UserBooks.findAll({
       where: { UserId: currentUser.id },
       order: [['createdAt', 'DESC']]
     });
 
+    const books = [];
+    for (let i = 0; i < userBooks.length; i++) {
+      books[i] = await Book.findAll({
+        where: { id: userBooks[i].BookId }
+      });
+    }
+    
     res.status(200).json({ books })
   } //funcionando
 
