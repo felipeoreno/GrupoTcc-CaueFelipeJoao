@@ -12,7 +12,7 @@ module.exports = class BookController {
   /*==================CRIAR LIVRO==================*/
   static async create(req, res) {
     console.log('--------INICIO----------\nreq:', req);
-    console.log('file: ', req.file);
+    console.log('files: ', req);
 
     //pegando o usuário
     let currentUser;
@@ -32,8 +32,8 @@ module.exports = class BookController {
 
     //recebendo imagem do livro
     let thumbnail = ''
-    if (req.file) {
-      thumbnail = req.file.filename
+    if (req.files) {
+      thumbnail = req.files
     } else {
       thumbnail = 'standardThumbnail.jpg';
     }
@@ -43,6 +43,17 @@ module.exports = class BookController {
       res.status(422).json({ message: 'O código ISBN do livro é obrigatório' })
       return
     }
+
+    const books = await Book.findAll({
+      where: {
+        id: isbn
+      }
+    });
+    if (books.length > 0) {
+      res.status(422).json({ message: `Já existe um livro com o código ISBN ${isbn}` })
+      return
+    }
+
     if (!title) {
       res.status(422).json({ message: 'O título é obrigatório' })
       return
@@ -76,15 +87,15 @@ module.exports = class BookController {
     // const decoded = jwt.verify(token, 'nossosecret')
     // currentUser = await User.findByPk(decoded.id)
 
-    // const image = req.files;
-    // if (image && image.length > 0) {
-    //   // Save each image to the ImageBook table
-    //   for (let i = 0; i < images.length; i++) {
-    //     const filename = images.filename;
-    //     const newBookThumbnail = new ImageBook({ image: filename, BookId: newBook.id });
-    //     await newBookThumbnail.save();
-    //   }
-    // }
+    const image = req.files;
+    if (image && image.length > 0) {
+      // Save each image to the ImageBook table
+      for (let i = 0; i < images.length; i++) {
+        const filename = images.filename;
+        const newBookThumbnail = new ImageBook({ image: filename, BookId: newBook.id });
+        await newBookThumbnail.save();
+      }
+    }
 
     //criando o livro
     const book = new Book({
@@ -93,7 +104,7 @@ module.exports = class BookController {
       subtitle: subtitle,
       authors: authors,
       categories: categories,
-      thumbnail: thumbnail,
+      thumbnail: thumbnail.filename,
       description: description,
       published_year: published_year,
       num_pages: num_pages
@@ -466,7 +477,7 @@ module.exports = class BookController {
         where: { id: userBooks[i].BookId }
       });
     }
-    
+
     res.status(200).json({ books })
   } //funcionando
 

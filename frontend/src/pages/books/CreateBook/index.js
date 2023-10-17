@@ -19,42 +19,6 @@ function AddBook() {
     }
   }
 
-  // const [selectedOptions, setSelectedOptions] = useState(new Set());
-
-  // function selectHandleChange(e) {
-  //   // console.log("selectedOptions: ", selectedOptions)
-  //   // console.log("target name: ", e.target.name)
-  //   // console.log("target value: ", e.target.value)
-  //   // const selectedOption = e.target.value;
-  //   // console.log("selectedOption: ", selectedOption)
-
-  //   // if (selectedOptions.has(selectedOption)) {
-  //   //   setSelectedOptions(selectedOptions.filter((option) => option !== selectedOption));
-  //   //   console.log("selectedOptions1: ", selectedOptions)
-  //   // } else {
-  //   //   setSelectedOptions(...selectedOptions, {[e.target.name]: selectedOption});
-  //   //   console.log("selectedOptions2: ", selectedOptions)
-  //   // }
-
-  //   console.log("selectedOptions: ", selectedOptions)
-  //   console.log("target name: ", e.target.name)
-  //   console.log("target value: ", e.target.value)
-  //   const selectedOption = e.target.value;
-  //   // console.log("selectedOption: ", selectedOption):
-
-  //   if (selectedOptions.has(selectedOption)) {
-  //     selectedOptions.delete(selectedOption);
-  //     console.log("selectedOptions1: ", selectedOptions)
-  //   } else {
-  //     selectedOptions.add(selectedOption);
-  //     console.log("selectedOptions2: ", selectedOptions)
-  //   }
-
-  //   setSelectedOptions(new Set(selectedOptions));
-  // };
-
-  const [thumbnail, setThumbnail] = useState(null)
-
   const options = [
     {
       value: 'Fantasia',
@@ -141,46 +105,14 @@ function AddBook() {
       label: 'Viagem',
     }
   ];
-  // // const options = [
-  // //   {
-  // //     value: '1',
-  // //     label: 'Opcao 1',
-  // //   },
-  // //   {
-  // //     value: '2',
-  // //     label: 'Opcao 2',
-  // //   },
-  // //   {
-  // //     value: '3',
-  // //     label: 'Opcao 3',
-  // //   },
-  // //   {
-  // //     value: '4',
-  // //     label: 'Opcao 3',
-  // //   },
-  // //   {
-  // //     value: '5',
-  // //     label: 'Opcao 3',
-  // //   },
-  // //   {
-  // //     value: '6',
-  // //     label: 'Opcao 3',
-  // //   },
-  // //   {
-  // //     value: '7',
-  // //     label: 'Opcao 3',
-  // //   }
-  // // ];
-  // const options = [
-  //   { value: 'chocolate', label: 'Chocolate' },
-  //   { value: 'strawberry', label: 'Strawberry' },
-  //   { value: 'vanilla', label: 'Vanilla' }
-  // ]
-  // console.log("options: ", options)
 
+  const [thumbnail, setThumbnail] = useState(null)
   function onFileChange(e) {
+    console.log(e)
     setPreview(URL.createObjectURL(e.target.files[0]))
     setThumbnail(e.target.files[0])
+    console.log(preview)
+    console.log(thumbnail)
   }
 
   async function handleSubmit(e) {
@@ -188,7 +120,7 @@ function AddBook() {
 
     const formData = new FormData()
     console.log("thumbnail: ", thumbnail)
-  // parei aqui 03/10
+
     if (thumbnail) {
       formData.append('thumbnail', thumbnail)
     }
@@ -203,7 +135,6 @@ function AddBook() {
     }).then((response) => {
       return response.data
     }).catch((err) => {
-      alert(err.response.data)
       return err.response.data
     })
     alert(data.message)
@@ -212,71 +143,91 @@ function AddBook() {
   return (
     <div>
       <h3>Cadastre um Livro</h3>
-      <form onSubmit={handleSubmit}>
-        <InputGroup
-          type='file'
-          label='Colocar capa do livro'
-          name='thumbnail'
-          handleChange={onFileChange}
-        />
-        <InputGroup
-          type='number'
-          label='Digite código ISBN de 13 dígitos do Livro'
-          name='isbn'
-          placeholder='Digite o código ISBN aqui'
-          handleChange={handleChange}
-        />
-        <InputGroup
-          type='text'
-          label='Digite o título do Livro'
-          name='title'
-          placeholder='Digite o título aqui'
-          handleChange={handleChange}
-        />
-        <InputGroup
-          type='text'
-          label='Digite o subtítulo do Livro'
-          name='subtitle'
-          placeholder='Digite o subtítulo aqui'
-          handleChange={handleChange}
-        />
-        <InputGroup
-          type='text'
-          label='Digite o nome do(s) autor(es)'
-          name='authors'
-          placeholder='Digite aqui o nome'
-          handleChange={handleChange}
-        />
-        <SelectMultiple
-          placeholder='Escolha as categorias do livro'
-          handleChange={handleChange}
-          options={options}
-        />
-        <InputGroup
-          type='text'
-          label='Digite a descrição do Livro'
-          name='description'
-          placeholder='Digite aqui a descrição'
-          handleChange={handleChange}
-        />
-        <InputGroup
-          type='number'
-          min='-10000'
-          max='2023'
-          label='Digite o ano de publicação do Livro'
-          name='published_year'
-          placeholder='Digite aqui o ano de publicação'
-          handleChange={handleChange}
-        />
-        <InputGroup
-          type='number'
-          min='1'
-          label='Digite o número de páginas do Livro'
-          name='num_pages'
-          placeholder='Digite aqui o número de páginas'
-          handleChange={handleChange}
-        />
-        <button type='submit'>Cadastrar</button>
+      <form className='row' onSubmit={handleSubmit}>
+        <div className='col-6'>
+          <InputGroup
+            type='number'
+            label='Digite código ISBN de 13 dígitos do Livro'
+            name='isbn'
+            placeholder='Digite o código ISBN aqui'
+            handleChange={handleChange}
+          />
+        </div>
+        <div className='col-6'>
+          <InputGroup
+            type='text'
+            label='Digite o título do Livro'
+            name='title'
+            placeholder='Digite o título aqui'
+            handleChange={handleChange}
+          />
+        </div>
+        <div className='col-6'>
+          <InputGroup
+            type='text'
+            label='Digite o subtítulo do Livro'
+            name='subtitle'
+            placeholder='Digite o subtítulo aqui'
+            handleChange={handleChange}
+          />
+        </div>
+        <div className='col-6'>
+          <InputGroup
+            type='text'
+            label='Digite o nome do(s) autor(es)'
+            name='authors'
+            placeholder='Digite aqui o nome'
+            handleChange={handleChange}
+          />
+        </div>
+        <div className='col-6'>
+          <SelectMultiple
+            placeholder='Escolha as categorias do livro'
+            handleChange={handleChange}
+            options={options}
+          />
+        </div>
+        <div className='col-6'>
+          <InputGroup
+            type='text'
+            label='Digite a descrição do Livro'
+            name='description'
+            placeholder='Digite aqui a descrição'
+            handleChange={handleChange}
+          />
+        </div>
+        <div className='col-6'>
+          <InputGroup
+            type='number'
+            min='-10000'
+            max='2023'
+            label='Digite o ano de publicação do Livro'
+            name='published_year'
+            placeholder='Digite aqui o ano de publicação'
+            handleChange={handleChange}
+          />
+        </div>
+        <div className='col-6'>
+          <InputGroup
+            type='number'
+            min='1'
+            label='Digite o número de páginas do Livro'
+            name='num_pages'
+            placeholder='Digite aqui o número de páginas'
+            handleChange={handleChange}
+          />
+        </div>
+        <div className='col-6'>
+          <InputGroup
+            type='file'
+            label='Colocar capa do livro'
+            name='thumbnail'
+            handleChange={onFileChange}
+          />
+        </div>
+        <div className='col-2'>
+          <button type='submit'>Cadastrar</button>
+        </div>
       </form>
     </div>
   )
