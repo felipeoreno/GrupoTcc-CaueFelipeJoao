@@ -108,18 +108,19 @@ function AddBook() {
 
   const [thumbnail, setThumbnail] = useState(null)
   function onFileChange(e) {
-    console.log(e)
+console.log("EVENTO: ", e)
     setPreview(URL.createObjectURL(e.target.files[0]))
-    setThumbnail(e.target.files[0])
-    console.log(preview)
-    console.log(thumbnail)
+    // setThumbnail(e.target.files[0])
+    setBook({ ...book, [e.target.name]: e.target.files[0] });
+console.log("PREVIEW: ", preview)
+console.log("THUMBNAIL: ", book.thumbnail)
   }
 
   async function handleSubmit(e) {
     e.preventDefault()
 
     const formData = new FormData()
-    console.log("thumbnail: ", thumbnail)
+console.log("thumbnail: ", book)
 
     if (thumbnail) {
       formData.append('thumbnail', thumbnail)
@@ -127,6 +128,7 @@ function AddBook() {
 
     //montando objeto com o formulario
     await Object.keys(book).forEach((key) => formData.append(key, book[key]))
+
     const data = await api.post(`books/create`, formData, {
       headers: {
         Authorization: `Bearer ${JSON.parse(token)}`,
