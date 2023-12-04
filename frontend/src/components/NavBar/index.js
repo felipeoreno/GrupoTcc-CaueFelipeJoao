@@ -25,13 +25,19 @@ function NavBar() {
   }, []);
 
   return (
-    <nav className='navbar navbar-expand bg-info mb-3'>
+    <nav className='navbar bg-info mb-3 shadow-sm'>
       <div className='container'>
-        <Link className='navbar-brand'>Com. Livros</Link>
-        <button className='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbar_links'>
+        <Link className='navbar-brand ms-2' to='/'>Comunidade de Livros Online</Link>
+        {authenticated ? (
+          <>
+            <div className='vr me-3 mt-2' style={{ height: '2.5rem' }}></div>
+            <Link className='me-auto nav-link' to='/users'>Usuários</Link>
+          </>
+        ) : (null)}
+        {/* <button className='navbar-toggler' type='button' data-bs-toggle='collapse' data-bs-target='#navbar_links'>
           <span className='navbar-toggler-icon'></span>
-        </button>
-        <div className='collapse navbar-collapse justify-content-end' id='navbar_links'>
+        </button> */}
+        <div className='justify-content-end' id='navbar_links'>
           <ul className='navbar nav'>
             <li className='nav-item'>
               <Link className='nav-link' to='/'>Home</Link>
@@ -55,9 +61,6 @@ function NavBar() {
                 </li>
                 <li className='nav-item'>
                   <Link className='nav-link' to='/books/create'>Cadastrar Livro</Link>
-                </li>
-                <li className='nav-item'>
-                  <Link className='nav-link' to='/books/edit'>Editar Livro</Link>
                 </li>
                 <li onClick={logout} className='nav-item'><Link className='nav-link' to='/'>Sair</Link></li>
               </>

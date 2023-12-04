@@ -280,12 +280,49 @@ module.exports = class UserController {
     }
   }
 
+  /*==================REMOVER USUÁRIOS POR ID==================*/
+  static async removeUserById(req, res) {
+
+    //checar se o usuario logado tem permissão para excluir
+    let currentUser;
+    const token = getToken(req);
+    const decoded = jwt.verify(token, 'nossosecret');
+    currentUser = await User.findByPk(decoded.id);
+    currentUser.password = undefined;
+    const currentUserLevel = currentUser.level;
+
+    if (currentUserLevel !== 1) {
+      res.status(422).json({ message: 'Você não tem permissão para executar esta ação' });
+      return;
+    }
+
+    const id = req.params.id;
+
+    if (isNaN(id)) {
+      res.status(422).json({ message: 'ID Inválido' });
+      return;
+    }
+
+    //get user by id
+    const user = await User.findByPk(id);
+
+    //validando se o ID é valido
+    if (!user) {
+      res.status(422).json({ message: 'O usuário não existe' });
+      return;
+    }
+
+    await User.destroy({ where: { id: id } });
+
+    res.status(200).json({ message: 'Usuário removido com sucesso' });
+  } //funcionando
+
   /*==================VER TODOS USUÁRIOS (PARA TESTE APENAS)==================*/
   static async getAll(req, res) {
     const users = await User.findAll({
       order: [['createdAt', 'DESC']]
     });
 
-    res.status(200).json({ user: users });
+    res.status(200).json({ users: users });
   }
 }

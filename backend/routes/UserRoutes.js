@@ -15,8 +15,9 @@ router.get('/:id', UserController.getUserById)
 //rotas protegidas, só acessar caso esteja logado!!!
 router.patch('/edit', verifyToken, imageUpload.single('image'), UserController.editUser)
 router.post('/follow/:id', verifyToken, UserController.followUser)
+router.get('/', verifyToken, UserController.getAll)
 
-//rotas de teste
-router.get('/', UserController.getAll)
+/* deletar um usuário pelo id */
+router.delete('/:id', verifyLevel, UserController.removeUserById);
 
 module.exports = router

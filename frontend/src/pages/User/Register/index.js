@@ -18,7 +18,7 @@ function Register() {
     //{...user}: isso aqui, cria uma cópia do objeto user atual, usando a sintaze de espalhamento do javascript(...), essa cópia e feita para preservar valores existentes no objeto antes de fazer qualquer att
   }
 
-  function handleSubmit(evento){
+  function handleSubmit(evento) {
     evento.preventDefault()
     register(user)
   }
@@ -27,43 +27,56 @@ function Register() {
     <div>
       <h2>Registrar</h2>
       <div>
-        <form onSubmit={handleSubmit}>
-          <InputGroup
-            type='text'
-            label='Digite seu nome'
-            placeholder='Seu nome aqui'
-            name='name'
-            handleChange={handleChange}
-          />
-          <InputGroup
-            type='email'
-            label='Digite seu email'
-            placeholder='Seu email aqui'
-            name='email'
-            handleChange={handleChange}
-          />
-          <InputGroup
-            type='tel'
-            label='Digite seu telefone aqui'
-            placeholder='Seu telefone aqui'
-            name='phone'
-            handleChange={handleChange}
-          />
-          <InputGroup
-            type='password'
-            label='Digite sua senha'
-            placeholder='Digite sua senha'
-            name='password'
-            handleChange={handleChange}
-          />
-          <InputGroup
-            type='password'
-            label='Confirme sua senha'
-            placeholder='Confirme sua senha'
-            name='confirmpassword'
-            handleChange={handleChange}
-          />
-          <button type='submit'>Registrar</button>
+        <form onSubmit={handleSubmit} className='row'>
+          <div className='col-6'>
+            <InputGroup
+              type='text'
+              label='Digite seu nome'
+              placeholder='Seu nome aqui'
+              name='name'
+              handleChange={handleChange}
+            />
+          </div>
+          <div className='col-6'>
+            <InputGroup
+              type='tel'
+              label='Digite seu telefone aqui'
+              placeholder='Seu telefone aqui'
+              name='phone'
+              handleChange={handleChange}
+            />
+          </div>
+          <div className='col-9'>
+            <InputGroup
+              type='email'
+              label='Digite seu email'
+              placeholder='Seu email aqui'
+              name='email'
+              handleChange={handleChange}
+            />
+          </div>
+          <div className='col-3'></div>
+          <div className='col-6'>
+            <InputGroup
+              type='password'
+              label='Digite sua senha'
+              placeholder='Digite sua senha'
+              name='password'
+              handleChange={handleChange}
+            />
+          </div>
+          <div className='col-6'>
+            <InputGroup
+              type='password'
+              label='Confirme sua senha'
+              placeholder='Confirme sua senha'
+              name='confirmpassword'
+              handleChange={handleChange}
+            />
+          </div>
+          <div className='col-2'>
+            <button type='submit' className='btn btn-primary'>Registrar</button>
+          </div>
         </form>
       </div>
     </div>

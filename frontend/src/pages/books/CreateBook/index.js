@@ -108,37 +108,82 @@ function AddBook() {
 
   const [thumbnail, setThumbnail] = useState(null)
   function onFileChange(e) {
-    console.log(e)
+    console.log("E: ", e)
     setPreview(URL.createObjectURL(e.target.files[0]))
     setThumbnail(e.target.files[0])
-    console.log(preview)
-    console.log(thumbnail)
+    console.log("PREVIEW: ", preview)
+    console.log("THUMBNAIL: ", thumbnail)
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault()
+//   async function handleSubmit(e) {
+//     e.preventDefault()
 
-    const formData = new FormData()
-    console.log("thumbnail: ", thumbnail)
+//     const formData = new FormData()
 
-    if (thumbnail) {
-      formData.append('thumbnail', thumbnail)
-    }
+//     // if (thumbnail) {
+//     //   formData.append('thumbnail', thumbnail)
+//     // }
 
-    //montando objeto com o formulario
-    await Object.keys(book).forEach((key) => formData.append(key, book[key]))
-    const data = await api.post(`books/create`, formData, {
+// console.log("FORMDATA: ", formData)
+// console.log("FORMDATA-THUMBNAIL: ", formData.get('thumbnail'))
+
+//     //montando objeto com o formulario
+//     await Object.keys(book).forEach((key) => formData.append(key, book[key]))
+//     for (const pair of formData.entries()) {
+//       console.log(`${pair[0]}, ${pair[1]}`);
+//     }
+// console.log("FORMDATA ID: ", formData.get("isbn"))
+
+//     const data = await api.post(`books/create`, {
+//       body: formData,
+//       file: thumbnail
+//     }, {
+//       headers: {
+//         Authorization: `Bearer ${JSON.parse(token)}`,
+//         'Content-Type': 'multipart/form-data'
+//       }
+//     }).then((response) => {
+//       console.log("aaaaaa:")
+//       return response.data
+//     }).catch((err) => {
+//       console.log("aaaaaa:", err)
+//       return err.response.data
+//     })
+//     alert(data.message)
+//   }
+
+async function handleSubmit(e) {
+  e.preventDefault();
+
+  const formData = new FormData();
+
+  // Append book data to formData
+  Object.keys(book).forEach((key) => formData.append(key, book[key]));
+
+  // Append thumbnail file to formData
+  if (thumbnail) {
+    formData.append('thumbnail', thumbnail);
+  }
+
+  try {
+    // Make the API call using axios (assuming 'api' is an axios instance)
+    const response = await api.post('books/create', formData, {
       headers: {
         Authorization: `Bearer ${JSON.parse(token)}`,
-        'Content-Type': 'application/json'
-      }
-    }).then((response) => {
-      return response.data
-    }).catch((err) => {
-      return err.response.data
-    })
-    alert(data.message)
+        'Content-Type': 'application/json',
+      },
+    });
+
+    // Handle the response
+    console.log('Response:', response.data);
+    alert(response.data.message);
+  } catch (error) {
+    // Handle errors
+    console.error('Error:', error.response.data);
+    alert(error.response.data.message || 'An error occurred.');
   }
+}
+
 
   return (
     <div>
@@ -226,7 +271,7 @@ function AddBook() {
           />
         </div>
         <div className='col-2'>
-          <button type='submit'>Cadastrar</button>
+          <button type='submit' className='btn btn-primary'>Cadastrar</button>
         </div>
       </form>
     </div>

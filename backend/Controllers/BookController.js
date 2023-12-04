@@ -11,8 +11,8 @@ const jwt = require('jsonwebtoken')
 module.exports = class BookController {
   /*==================CRIAR LIVRO==================*/
   static async create(req, res) {
-    console.log('--------INICIO----------\nreq:', req);
-    console.log('files: ', req);
+    console.log('--------INÍCIO----------\n');
+    console.log('REQ: ', res);
 
     //pegando o usuário
     let currentUser;
@@ -27,8 +27,7 @@ module.exports = class BookController {
 
     const { isbn, title, subtitle, categories, published_year, num_pages } = req.body;
     let { authors, description } = req.body;
-    console.log('id: ', isbn);
-    console.log('title: ', title);
+console.log('ID: ', isbn);
 
     //recebendo imagem do livro
     let thumbnail = ''
@@ -37,7 +36,7 @@ module.exports = class BookController {
     } else {
       thumbnail = 'standardThumbnail.jpg';
     }
-    console.log('imagem: ', thumbnail)
+console.log('THUMBNAIL: ', thumbnail)
 
     if (!isbn) {
       res.status(422).json({ message: 'O código ISBN do livro é obrigatório' })
@@ -302,7 +301,7 @@ module.exports = class BookController {
 
     await Book.update(updatedData, { where: { id: bookId } });
 
-    res.status(200).json({ message: "att com successo!" })
+    res.status(200).json({ message: "Livro atualizado com successo!" })
   }
 
   /*==================ADICIONAR LIVRO À BIBLIOTECA DO USUÁRIO==================*/

@@ -13,6 +13,8 @@ import Login from '../pages/User/Login';
 import EditProfile from '../pages/User/EditProfile';
 import Profile from '../pages/User/Profile';
 import Register from '../pages/User/Register';
+import Users from '../pages/User/Users';
+import UserDetails from '../pages/User/UserDetails';
 
 // Livros
 import AddBook from '../pages/Books/CreateBook';
@@ -43,12 +45,20 @@ function MyRoutes() {
     <>
       <Routes>
         <Route exact path="/" element={<Home />} />
+        {user.level === 1 ? (
+          <>
+            <Route exact path="/books/create" element={<AddBook />} />
+            <Route exact path="/books/edit/:id" element={<EditBook />} />
+          </>
+        ) : (null)}
         {authenticated ? (
           <>
             <Route exact path="/user/profile" element={<Profile />} />
             <Route exact path="/user/profile/edit" element={<EditProfile />} />
-            <Route exact path="/books/:id" element={<BookDetails />} />
             <Route exact path="/books/mybooks" element={<MyBooks />} />
+            <Route exact path="/books/:id" element={<BookDetails />} />
+            <Route exact path="/users" element={<Users />} />
+            <Route exact path="/users/:id" element={<UserDetails />} />
           </>
         ) : (
           <>
@@ -57,12 +67,6 @@ function MyRoutes() {
             <Route exact path="/login" element={<Login />} />
           </>
         )}
-        {user.level === 1 ? (
-          <>
-            <Route exact path="/books/create" element={<AddBook />} />
-            <Route exact path="/books/edit" element={<EditBook />} />
-          </>
-        ) : (null)}
       </Routes>
     </>
   )

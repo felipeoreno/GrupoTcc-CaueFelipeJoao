@@ -42,28 +42,28 @@ function MyBooks() {
       <div className='d-flex justify-content-around flex-wrap'>
         {books.length > 0 &&
           books.map((book) => (
-            <div className='col-2' style={{ height: '25rem' }}>
-            <figure
-              key={book[0].id}
-              className='card p-2'
-              style={{ height: '22rem', width: '18rem' }}
-            >
-              <img
-                src={`${book[0].thumbnail}`}
-                alt={book[0].title}
-                className='card-img-top'
-              />
-              <figcaption className='card-body'>
-                <h5 className='card-title'>{book[0].title}</h5>
-                <div>
-                  <Link className='btn btn-warning fs-7' >Editar</Link>
-                  <button
-                    onClick={() => { removeBook(book[0].id) }}
-                    className='btn btn-danger'
-                  >Excluir</button>
-                </div>
-              </figcaption>
-            </figure>
+            <div className='col-2' style={{ height: '35rem' }}>
+              <figure
+                key={book[0].id}
+                className='card p-2'
+                style={{ height: '34rem', width: '18rem' }}
+              >
+                <img
+                  src={`${book[0].thumbnail}`}
+                  alt={book[0].title}
+                  className='card-img-top'
+                />
+                <figcaption className='card-body'>
+                  <h5 className='card-title'>{book[0].title}</h5>
+                  <div>
+                    <Link className='btn btn-warning me-2' >Editar</Link>
+                    <button
+                      onClick={() => { removeBook(book[0].id) }}
+                      className='btn btn-danger ms-2'
+                    >Excluir</button>
+                  </div>
+                </figcaption>
+              </figure>
             </div>
           ))}
         {books.length === 0 && <p>Ainda não há Livros na sua biblioteca</p>}

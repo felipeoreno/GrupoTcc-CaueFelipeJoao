@@ -28,21 +28,22 @@ function Login() {
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <InputGroup
-          label='Email'
+          label='E-mail'
           type='email'
           name='email'
           placeholder='Digite seu email'
           handleChange={handleChange}
         />
         <InputGroup
-          label='password'
+          label='Senha'
           type='password'
           name='password'
           placeholder='Digite sua senha'
           handleChange={handleChange}
         />
-        <button type='submit'>Login</button>
+        <button type='submit' className='btn btn-primary'>Login</button>
       </form>
+      <br />
       <p>
         Não tem conta? <Link to='/register'>Clique aqui!</Link>
       </p>

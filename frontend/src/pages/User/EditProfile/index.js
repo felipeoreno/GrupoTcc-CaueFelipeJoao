@@ -70,59 +70,75 @@ function EditProfile() {
   return (
     <div>
       <h2>Perfil</h2>
-      <img
-        style={{ height: '200px', width: '200px' }}
-        className='rounded-circle m-3'
-        src={'http://localhost:5000/image/users/' + user.image}
-        alt='Foto de perfil'
-      />
-      <form onSubmit={handleSubmit}>
-        <InputGroup
-          label='Imagem'
-          type='file'
-          name='image'
-          handleChange={onFileChange}
-          value={user.image}
-        />
-        <InputGroup
-          type='text'
-          label='Nome'
-          name='name'
-          placeholder='Digite seu nome'
-          handleChange={handleChange}
-          value={user.name}
-        />
-        <InputGroup
-          type='email'
-          label='E-mail'
-          name='email'
-          placeholder='Digite seu email'
-          handleChange={handleChange}
-          value={user.email}
-        />
-        <InputGroup
-          type='phone'
-          label='Telefone'
-          name='phone'
-          placeholder='Digite seu telefone'
-          handleChange={handleChange}
-          value={user.phone}
-        />
-        <InputGroup
-          type='password'
-          label='Senha'
-          name='password'
-          placeholder='Digite sua senha'
-          handleChange={handleChange}
-        />
-        <InputGroup
-          type='password'
-          label='Confirme a senha'
-          name='confirmpassword'
-          placeholder='Confirme a senha'
-          handleChange={handleChange}
-        />
-        <button type='submit'>Atualizar</button>
+      <form className='row' onSubmit={handleSubmit}>
+        <div className='col-3'>
+          <img
+            style={{ width: '200px' }}
+            className='rounded-circle m-3'
+            src={'http://localhost:5000/image/users/' + user.image}
+            alt='Foto de perfil'
+          />
+        </div>
+        <div className='col-6'>
+          <InputGroup
+            label='Imagem'
+            type='file'
+            name='image'
+            handleChange={onFileChange}
+          // value={user.image}
+          />
+        </div>
+        <div className='col-6'>
+          <InputGroup
+            type='text'
+            label='Nome'
+            name='name'
+            placeholder='Digite seu nome'
+            handleChange={handleChange}
+            value={user.name}
+          />
+        </div>
+        <div className='col-6'>
+          <InputGroup
+            type='phone'
+            label='Telefone'
+            name='phone'
+            placeholder='Digite seu telefone'
+            handleChange={handleChange}
+            value={user.phone}
+          />
+        </div>
+        <div className='col-12'>
+          <InputGroup
+            type='email'
+            label='E-mail'
+            name='email'
+            placeholder='Digite seu email'
+            handleChange={handleChange}
+            value={user.email}
+          />
+        </div>
+        <div className='col-6'>
+          <InputGroup
+            type='password'
+            label='Senha'
+            name='password'
+            placeholder='Digite sua senha'
+            handleChange={handleChange}
+          />
+        </div>
+        <div className='col-6'>
+          <InputGroup
+            type='password'
+            label='Confirme a senha'
+            name='confirmpassword'
+            placeholder='Confirme a senha'
+            handleChange={handleChange}
+          />
+        </div>
+        <div className='col-2'>
+          <button type='submit' className='btn btn-primary'>Atualizar</button>
+        </div>
       </form>
     </div>
   )

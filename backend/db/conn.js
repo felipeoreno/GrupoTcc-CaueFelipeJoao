@@ -1,8 +1,7 @@
 //db/conn.js
-
 const { Sequelize } = require('sequelize')
 
-const sequelize = new Sequelize('com_livros', 'root', 'sucesso'/*'root'*/, { //senha é sucesso no  senai
+const sequelize = new Sequelize('com_livros', 'root', /*'sucesso'*/'root', { //senha é sucesso no  senai
   host: 'localhost',
   dialect: 'mysql'
 })

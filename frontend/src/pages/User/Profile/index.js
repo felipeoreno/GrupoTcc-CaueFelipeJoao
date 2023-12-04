@@ -17,7 +17,7 @@ function Profile() {
       <h2>Meu Perfil</h2>
       <hr></hr>
       <ul className='list-group col-4'>
-        <li className='list-group-item'><img src={`${user.image}`} className='img-fluid'></img></li>
+        <li className='list-group-item'><img src={`http://localhost:5000/image/users/${user.image}`} className='img-fluid'></img></li>
         <li className='list-group-item'>Nome: {user.name}</li>
         <li className='list-group-item'>E-mail: {user.email}</li>
         <li className='list-group-item'>Telefone: {user.phone}</li>

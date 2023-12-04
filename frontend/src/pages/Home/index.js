@@ -10,6 +10,7 @@ function Home() {
   const [books, setBooks] = useState([]);
   const [user, setUser] = useState({});
   const { authenticated } = useContext(Context);
+  const [token] = useState(localStorage.getItem('token') || '');
 
   useEffect(() => {
     api.get('/books').then((response) => {
@@ -30,7 +31,7 @@ function Home() {
 
   return (
     <section className="container">
-      <div>
+      <div className="bg-body-tertiary rounded ps-2 pb-1 mb-2">
         <h1 className='fw-semibold'>Bem vindo à <b className='fw-bolder'>Comunidade de Livros Online</b></h1>
         {authenticated ? (
           <p>Veja o que há de novo no mundo dos Livros</p>
@@ -38,16 +39,15 @@ function Home() {
           <p>Crie sua conta e junte-se à comunidade!</p>
         )}
       </div>
-      <div className='container d-flex justify-content-around flex-wrap row g-2'>
-        {books.length > 0 && user.level !== 0 ? (
+      <div className='container d-flex justify-content-start flex-wrap row g-4'>
+        {books.length > 0 && user.level === 1 ? (
           books.map((book) => (
-            <div key={book.id} className='col-2' style={{ height: '25rem' }}>
-              <figure className='card p-2' key={book.id} style={{ height: '22rem' }}>
+            <div className='col-2'>
+              <figure className='card p-2 bg-light h-100' key={book.id}>
                 <Link to={`/books/${book.id}`}>
                   <img
                     src={`${book.thumbnail}`}
                     className='card-img-top'
-                  // style={{ width: '18rem' }}
                   />
                 </Link>
                 <figcaption className='card-body'>
@@ -59,26 +59,20 @@ function Home() {
               </figure>
             </div>
           ))
-        ) : books.length > 0 && user.level === 1 ? (
+        ) : books.length > 0 ? (
           books.map((book) => (
-            <div className='col-2'>
-              <figure className='card p-2' key={book.id} style={{ height: '95%' }}>
+            <div key={book.id} className='col-3' style={{ height: '31rem' }}>
+              <figure className='card p-2 bg-light h-100' key={book.id}>
                 <Link to={`/books/${book.id}`}>
                   <img
                     src={`${book.thumbnail}`}
                     className='card-img-top'
-                  // style={{ width: '18rem' }}
                   />
                 </Link>
                 <figcaption className='card-body'>
                   <h3 className='card-title'>{book.name}</h3>
                   <p className='card-text'>
                     <Link className='link-opacity-100-hover link-offset-2-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover' to={`/books/${book.id}`}>{book.title}</Link>
-                    <div className='mt-2 row justify-content-end g-2'>
-                      <button className='btn btn-primary col-8'>
-                        <Link className='link-light link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover' to={`/books/edit/${book.id}`}>Editar</Link>
-                      </button>
-                    </div>
                   </p>
                 </figcaption>
               </figure>
